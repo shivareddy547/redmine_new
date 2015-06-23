@@ -1,0 +1,33 @@
+/home/developer/.rvm/rubies/ruby-1.9.3-p547/bin/ruby extconf.rb 
+checking for ruby/thread.h... no
+checking for rb_thread_blocking_region()... yes
+checking for rb_wait_for_single_fd()... yes
+checking for rb_hash_dup()... yes
+checking for rb_intern3()... yes
+-----
+Using mysql_config at /usr/bin/mysql_config
+-----
+checking for mysql.h... yes
+checking for errmsg.h... yes
+checking for mysqld_error.h... yes
+-----
+Setting libpath to /usr/lib/x86_64-linux-gnu
+-----
+creating Makefile
+
+make  clean
+
+make
+compiling result.c
+result.c: In function ‘msec_char_to_uint’:
+result.c:186:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for (i = 0; i < (len - 1); i++) {
+                 ^
+compiling client.c
+compiling mysql2_ext.c
+compiling infile.c
+linking shared-object mysql2/mysql2.so
+
+make  install
+/usr/bin/install -m 0755 mysql2.so /home/developer/redmine/cluster/new_code/vendor/bundle/ruby/1.9.1/gems/mysql2-0.3.18/ext/mysql2/.gem.20150619-29078-lht8bs/mysql2
+installing default mysql2 libraries
