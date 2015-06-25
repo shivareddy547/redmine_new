@@ -29,7 +29,7 @@ production:
       authentication:  :login
       domain:  itp.objectfrontier.com
       user_name:  shiva.srinivasreddy@object-frontier.com
-      password:  New16domain
+      password:  New14domain
 
 
 # === More configuration options
@@ -50,7 +50,7 @@ default:
       domain:  itp.objectfrontier.com
       authentication:  :login
       user_name:  shiva.srinivasreddy@object-frontier.com
-      password:  New16domain
+      password:  New14domain
       enable_starttls_auto: true
 
   # Absolute path to the directory where attachments are stored.
@@ -60,7 +60,7 @@ default:
   # Examples:
   # attachments_storage_path: /var/redmine/files
   # attachments_storage_path: D:/redmine/files
-  attachments_storage_path: "/home/superadmin/redmine/files"
+  attachments_storage_path: "/home/ofsadm/redmine/files"
 
   # Configuration of the autologin cookie.
   # autologin_cookie_name: the name of the cookie (default: autologin)
