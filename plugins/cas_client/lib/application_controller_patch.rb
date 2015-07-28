@@ -1,26 +1,10 @@
 module ApplicationControllerPatch
   def self.included(base)
     base.class_eval do
-      # Insert overrides here, for example:
-      # Issues Bulk update with out Activities updation
-      before_filter :update_cas_configuration
-      before_filter CASClient::Frameworks::Rails::Filter
-
-      def update_cas_configuration
-         root_url = request.fullpath
-        if !root_url.include?('ticket=')
-          url = "http://#{request.host_with_port}#{root_url}"
-          CASClient::Frameworks::Rails::Filter.configure(
-              :cas_base_url  => "https://192.168.8.103:8443/cas",
-              :authenticate_on_every_request=>true,
-              :service_url => url
-          )
-
-        end
-      end
-
+     
+      before_filter RubyCAS::Filter,:except => [:autocomplete,:getusers]
       def find_current_user
-        p 111111111111111111111111111111111111111111111111111111111111111
+        
         user = nil
         unless api_request?
           if session[:user_id]
