@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'source_sans_problack';
+    src: url('sourcesanspro-black-webfont.eot');
+    src: url('sourcesanspro-black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-black-webfont.woff') format('woff'),
+         url('sourcesanspro-black-webfont.ttf') format('truetype'),
+         url('sourcesanspro-black-webfont.svg#source_sans_problack') format('svg');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'source_sans_problack';
+    src: url('sourcesanspro-blackit-webfont.eot');
+    src: url('sourcesanspro-blackit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-blackit-webfont.woff') format('woff'),
+         url('sourcesanspro-blackit-webfont.ttf') format('truetype'),
+         url('sourcesanspro-blackit-webfont.svg#source_sans_problack_italic') format('svg');
+    font-weight: 900;
+    font-style: italic;
+}

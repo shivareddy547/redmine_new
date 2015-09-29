@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'source_sans_proextralight';
+    src: url('sourcesanspro-extralight-webfont.eot');
+    src: url('sourcesanspro-extralight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-extralight-webfont.woff') format('woff'),
+         url('sourcesanspro-extralight-webfont.ttf') format('truetype'),
+         url('sourcesanspro-extralight-webfont.svg#source_sans_proextralight') format('svg');
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'source_sans_proextralight';
+    src: url('sourcesanspro-extralightit-webfont.eot');
+    src: url('sourcesanspro-extralightit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-extralightit-webfont.woff') format('woff'),
+         url('sourcesanspro-extralightit-webfont.ttf') format('truetype'),
+         url('sourcesanspro-extralightit-webfont.svg#source_sans_proXLtIt') format('svg');
+    font-weight: 200;
+    font-style: italic;
+}

@@ -1,0 +1,149 @@
+/*@import "sourcesanspro-black-webfont/stylesheet.css";*/
+/*@import "sourcesanspro-bold-webfont/stylesheet.css";*/
+/*@import "sourcesanspro-semibold-webfont/stylesheet.css";*/
+/*@import "sourcesanspro-regular-webfont/stylesheet.css";*/
+/*@import "sourcesanspro-light-webfont/stylesheet.css";*/
+/*@import "sourcesanspro-extralight-webfont/stylesheet.css";*/
+
+body { 
+    text-rendering: optimizeLegibility;
+    font-variant-ligatures: common-ligatures;
+    -moz-font-feature-settings:"liga=1, dlig=1"; 
+    -moz-font-feature-settings:"liga", "dlig"; /* EDIT: new syntax for FF 15+ */ 
+    -ms-font-feature-settings:"liga", "dlig"; 
+    -o-font-feature-settings:"liga", "dlig"; 
+    -webkit-font-feature-settings:"liga", "dlig"; 
+    font-feature-settings:"liga", "dlig";
+}
+
+/* Black */
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-black-webfont/sourcesanspro-black-webfont.eot');
+    src: url('sourcesanspro-black-webfont/sourcesanspro-black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-black-webfont/sourcesanspro-black-webfont.woff') format('woff'),
+         url('sourcesanspro-black-webfont/sourcesanspro-black-webfont.ttf') format('truetype'),
+         url('sourcesanspro-black-webfont/sourcesanspro-black-webfont.svg#source_sans_problack') format('svg');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-black-webfont/sourcesanspro-blackit-webfont.eot');
+    src: url('sourcesanspro-black-webfont/sourcesanspro-blackit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-black-webfont/sourcesanspro-blackit-webfont.woff') format('woff'),
+         url('sourcesanspro-black-webfont/sourcesanspro-blackit-webfont.ttf') format('truetype'),
+         url('sourcesanspro-black-webfont/sourcesanspro-blackit-webfont.svg#source_sans_problack_italic') format('svg');
+    font-weight: 900;
+    font-style: italic;
+}
+
+/* Bold */
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-bold-webfont/sourcesanspro-bold-webfont.eot');
+    src: url('sourcesanspro-bold-webfont/sourcesanspro-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-bold-webfont/sourcesanspro-bold-webfont.woff') format('woff'),
+         url('sourcesanspro-bold-webfont/sourcesanspro-bold-webfont.ttf') format('truetype'),
+         url('sourcesanspro-bold-webfont/sourcesanspro-bold-webfont.svg#source_sans_probold') format('svg');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-bold-webfont/sourcesanspro-boldit-webfont.eot');
+    src: url('sourcesanspro-bold-webfont/sourcesanspro-boldit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-bold-webfont/sourcesanspro-boldit-webfont.woff') format('woff'),
+         url('sourcesanspro-bold-webfont/sourcesanspro-boldit-webfont.ttf') format('truetype'),
+         url('sourcesanspro-bold-webfont/sourcesanspro-boldit-webfont.svg#source_sans_probold_italic') format('svg');
+    font-weight: 700;
+    font-style: italic;
+}
+
+/* Semibold */
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-semibold-webfont/sourcesanspro-semibold-webfont.eot');
+    src: url('sourcesanspro-semibold-webfont/sourcesanspro-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-semibold-webfont/sourcesanspro-semibold-webfont.woff') format('woff'),
+         url('sourcesanspro-semibold-webfont/sourcesanspro-semibold-webfont.ttf') format('truetype'),
+         url('sourcesanspro-semibold-webfont/sourcesanspro-semibold-webfont.svg#source_sans_prosemibold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-semibold-webfont/sourcesanspro-semiboldit-webfont.eot');
+    src: url('sourcesanspro-semibold-webfont/sourcesanspro-semiboldit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-semibold-webfont/sourcesanspro-semiboldit-webfont.woff') format('woff'),
+         url('sourcesanspro-semibold-webfont/sourcesanspro-semiboldit-webfont.ttf') format('truetype'),
+         url('sourcesanspro-semibold-webfont/sourcesanspro-semiboldit-webfont.svg#source_sans_proSBdIt') format('svg');
+    font-weight: 600;
+    font-style: italic;
+}
+
+/* Regular */
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-regular-webfont/sourcesanspro-regular-webfont.eot');
+    src: url('sourcesanspro-regular-webfont/sourcesanspro-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-regular-webfont/sourcesanspro-regular-webfont.woff') format('woff'),
+         url('sourcesanspro-regular-webfont/sourcesanspro-regular-webfont.ttf') format('truetype'),
+         url('sourcesanspro-regular-webfont/sourcesanspro-regular-webfont.svg#source_sans_proregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-regular-webfont/sourcesanspro-it-webfont.eot');
+    src: url('sourcesanspro-regular-webfont/sourcesanspro-it-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-regular-webfont/sourcesanspro-it-webfont.woff') format('woff'),
+         url('sourcesanspro-regular-webfont/sourcesanspro-it-webfont.ttf') format('truetype'),
+         url('sourcesanspro-regular-webfont/sourcesanspro-it-webfont.svg#source_sans_proitalic') format('svg');
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Light */
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-light-webfont/sourcesanspro-light-webfont.eot');
+    src: url('sourcesanspro-light-webfont/sourcesanspro-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-light-webfont/sourcesanspro-light-webfont.woff') format('woff'),
+         url('sourcesanspro-light-webfont/sourcesanspro-light-webfont.ttf') format('truetype'),
+         url('sourcesanspro-light-webfont/sourcesanspro-light-webfont.svg#source_sans_prolight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-light-webfont/sourcesanspro-lightit-webfont.eot');
+    src: url('sourcesanspro-light-webfont/sourcesanspro-lightit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-light-webfont/sourcesanspro-lightit-webfont.woff') format('woff'),
+         url('sourcesanspro-light-webfont/sourcesanspro-lightit-webfont.ttf') format('truetype'),
+         url('sourcesanspro-light-webfont/sourcesanspro-lightit-webfont.svg#source_sans_prolight_italic') format('svg');
+    font-weight: 300;
+    font-style: italic;
+}
+
+/* Extralight */
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-extralight-webfont/sourcesanspro-extralight-webfont.eot');
+    src: url('sourcesanspro-extralight-webfont/sourcesanspro-extralight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-extralight-webfont/sourcesanspro-extralight-webfont.woff') format('woff'),
+         url('sourcesanspro-extralight-webfont/sourcesanspro-extralight-webfont.ttf') format('truetype'),
+         url('sourcesanspro-extralight-webfont/sourcesanspro-extralight-webfont.svg#source_sans_proextralight') format('svg');
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'source-sans-pro';
+    src: url('sourcesanspro-extralight-webfont/sourcesanspro-extralightit-webfont.eot');
+    src: url('sourcesanspro-extralight-webfont/sourcesanspro-extralightit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('sourcesanspro-extralight-webfont/sourcesanspro-extralightit-webfont.woff') format('woff'),
+         url('sourcesanspro-extralight-webfont/sourcesanspro-extralightit-webfont.ttf') format('truetype'),
+         url('sourcesanspro-extralight-webfont/sourcesanspro-extralightit-webfont.svg#source_sans_proXLtIt') format('svg');
+    font-weight: 200;
+    font-style: italic;
+}
