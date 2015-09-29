@@ -54,7 +54,7 @@ module EKanban
 
           validate :validate_kanban_card_update, :if => Proc.new{!self.new_record?}
           validate :validate_kanban_card_new, :if => Proc.new{self.new_record?}
-          validates_presence_of :assigned_to
+          #validates_presence_of :assigned_to
           before_update :kanban_update
 
           def init_journal(user, notes = "")
