@@ -1,0 +1,65 @@
+<td>
+
+  <%#=check_box_tag 'billable', ""  %>
+  <%= check_box_tag :user_billable , 1 , member.billable ? true : false,:member_id=>member.id,:disabled => true %>
+  <%= hidden_field_tag 'billable_status', member.billable,:id=>"member_billable_status",:member_id=>member.id,:billable_status=>member.billable %>
+  <%#= check_box_tag :indoor_volleyball, checked = true %>
+</td>
+
+
+<script>
+
+
+  $(document).on('click', '#user_billable', function() {
+    // code here
+    member_id = $(this).attr("member_id");
+
+
+    if($(this).is(":checked")) {
+      var billable_status= true
+      $('<input>').attr({
+        type: 'hidden',
+        id: 'member_billable_'+member_id,
+        name: 'billable',
+        value: billable_status
+      }).appendTo('#member-'+member_id+'-roles-form');
+
+
+//             <input id="member_billable_6826" name="billable" type="hidden" value="true">
+
+//        $("#member_billable_"+member_id).val("true")
+    }
+    else
+    {
+      var billable_status= false
+      $('<input>').attr({
+        type: 'hidden',
+        id: 'member_billable_'+member_id,
+        name: 'billable',
+        value: billable_status
+      }).appendTo('#member-'+member_id+'-roles-form');
+//        $("#member_billable_"+member_id).val("false")
+    }
+
+  });
+
+  $(document).on('click', 'table.members .icon-edit', function() {
+    $(this).closest('tr').find("#user_billable").attr("disabled", false);
+
+    var billable_status = $(this).closest('tr').find("#member_billable_status").val();
+    var member_id = $(this).closest('tr').find("#member_billable_status").attr("member_id");
+    console.log(billable_status);
+    console.log(member_id);
+
+    $('<input>').attr({
+      type: 'hidden',
+      id: 'member_billable_'+member_id,
+      name: 'billable',
+      value: billable_status
+    }).appendTo('#member-'+member_id+'-roles-form');
+
+  });
+
+
+
+</script>

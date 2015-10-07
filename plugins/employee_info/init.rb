@@ -2,7 +2,7 @@
 require 'employee_info/user_patch'
 
 UsersController.send(:include, UsersControllerPatch)
-
+MembersController.send(:include, MembersControllerPatch)
 
 Redmine::Plugin.register :employee_info do
   name 'Employee Info plugin'
