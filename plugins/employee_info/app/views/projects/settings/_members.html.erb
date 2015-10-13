@@ -117,6 +117,8 @@
                     :remote => true, :method => :post}) do |f| %>
           <fieldset>
             <legend><%=l(:label_member_new)%></legend>
+            <%= call_hook(:view_projects_settings_members_new_user_header, :project => @project) %>
+
             <p>
               <%= label_tag("principal_search", l(:label_principal_search)) %>
               <%= text_field_tag('principal_search', nil) %>

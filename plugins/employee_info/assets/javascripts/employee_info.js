@@ -14,8 +14,9 @@ $(document).on('click', '#user_billable', function() {
         }).appendTo('#member-'+member_id+'-roles-form');
 
     }
-    else
+    else if($(this).val() == "NonBillable")
     {
+
         //alert("Non billable")
         var billable_status= false
         $('<input>').attr({
@@ -26,6 +27,16 @@ $(document).on('click', '#user_billable', function() {
         }).appendTo('#member-'+member_id+'-roles-form');
 
     }
+    else{
+       var billable_status= ""
+       $('<input>').attr({
+           type: 'hidden',
+           id: 'member_billable_'+member_id,
+           name: 'billable',
+           value: billable_status
+       }).appendTo('#member-'+member_id+'-roles-form');
+
+   }
 
 });
 
