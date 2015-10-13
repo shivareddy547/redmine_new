@@ -1,8 +1,10 @@
 
 $(document).on('click', '#user_billable', function() {
     // code here
+    //alert("++++")
     member_id = $(this).attr("member_id");
-   if($(this).is(":checked")) {
+   if($(this).val() == "Billable") {
+       //alert("billable")
         var billable_status= true
         $('<input>').attr({
             type: 'hidden',
@@ -14,6 +16,7 @@ $(document).on('click', '#user_billable', function() {
     }
     else
     {
+        //alert("Non billable")
         var billable_status= false
         $('<input>').attr({
             type: 'hidden',

@@ -1,5 +1,6 @@
 
 require 'employee_info/user_patch'
+require 'employee_info/member_patch'
 
 UsersController.send(:include, UsersControllerPatch)
 MembersController.send(:include, MembersControllerPatch)
@@ -11,10 +12,21 @@ Redmine::Plugin.register :employee_info do
   version '0.0.1'
   url 'http://inia.objectfrontier.com'
   author_url 'http://inia.objectfrontier.com'
+
+  # project_module :billable_permissions do
+  #   permission :billable, :public => true
+  #   permission :non_billable, :public => true
+  # end
+
 end
+
+
 Rails.configuration.to_prepare do
  unless User.included_modules.include? EmployeeInfo::Patches::UserPatch
     User.send(:include, EmployeeInfo::Patches::UserPatch)
+ end
+ unless Member.included_modules.include? EmployeeInfo::Patches::MemberPatch
+   Member.send(:include, EmployeeInfo::Patches::MemberPatch)
  end
 end
 

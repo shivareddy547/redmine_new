@@ -1,7 +1,9 @@
 <td>
 
   <%#=check_box_tag 'billable', ""  %>
-  <%= check_box_tag :user_billable , 1 , member.billable ? true : false,:member_id=>member.id,:disabled => true %>
+  <%#= member.billable.inspect %>
+  <%#= check_box_tag :user_billable , 1 , member.billable ? true : false,:member_id=>member.id,:disabled => true %>
+  <%= select_tag "user_billable", options_for_select(["Billable", "NonBillable" ], !member.billable.nil? ? member.billable==true ? "Billable" : "NonBillable" : "") ,include_blank: true,:member_id=>member.id,:disabled => true %>
   <%= hidden_field_tag 'billable_status', member.billable,:id=>"member_billable_status",:member_id=>member.id,:billable_status=>member.billable %>
   <%#= check_box_tag :indoor_volleyball, checked = true %>
 </td>
