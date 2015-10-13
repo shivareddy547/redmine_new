@@ -2,7 +2,7 @@
 //.unbind()
 
 
-$(document).on('click', '#user_billable', function(event) {
+$(document).on('change', '#user_billable', function(event) {
     event.stopImmediatePropagation();
     // code here
     //alert("++++")
@@ -88,7 +88,9 @@ $(document).on('click', '#cancel_member', function(event) {
 
 });
 
-$(document).on('click', '#billable', function(event) {
+$(document).on('change', '#billable', function(event) {
+
+    //$('select').on('change', function() {
     event.stopImmediatePropagation();
 
     if($(this).val()) {
