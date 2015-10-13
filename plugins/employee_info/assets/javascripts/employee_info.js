@@ -1,5 +1,9 @@
 
-$(document).on('click', '#user_billable', function() {
+//.unbind()
+
+
+$(document).on('click', '#user_billable', function(event) {
+    event.stopImmediatePropagation();
     // code here
     //alert("++++")
     member_id = $(this).attr("member_id");
@@ -12,7 +16,7 @@ $(document).on('click', '#user_billable', function() {
             name: 'billable',
             value: billable_status
         }).appendTo('#member-'+member_id+'-roles-form');
-
+       $('#member-'+member_id+'-roles-form').find('[name=commit]').attr("disabled", false);
     }
     else if($(this).val() == "NonBillable")
     {
@@ -25,9 +29,11 @@ $(document).on('click', '#user_billable', function() {
             name: 'billable',
             value: billable_status
         }).appendTo('#member-'+member_id+'-roles-form');
+        $('#member-'+member_id+'-roles-form').find('[name=commit]').attr("disabled", false);
 
     }
     else{
+       alert("Error:Please Select Billable Or NonBillable")
        var billable_status= ""
        $('<input>').attr({
            type: 'hidden',
@@ -35,19 +41,21 @@ $(document).on('click', '#user_billable', function() {
            name: 'billable',
            value: billable_status
        }).appendTo('#member-'+member_id+'-roles-form');
+       $('#member-'+member_id+'-roles-form').find('[name=commit]').attr("disabled", true);
 
    }
 
 });
 
-$(document).on('click', 'table.members .icon-edit', function() {
+$(document).on('click', 'table.members .icon-edit', function(event) {
+    event.stopImmediatePropagation();
     $(this).closest('tr').find("#user_billable").attr("disabled", false);
     var billable_status = $(this).closest('tr').find("#member_billable_status").val();
     var member_id = $(this).closest('tr').find("#member_billable_status").attr("member_id");
     $('#member-'+member_id+'-roles-form').find('a').attr('id', 'cancel_member');
     $('#member-'+member_id+'-roles-form').find('a').attr('member_id', member_id);
-    console.log(billable_status);
-    console.log(member_id);
+    //console.log(billable_status);
+    //console.log(member_id);
 
     $('<input>').attr({
         type: 'hidden',
@@ -60,7 +68,8 @@ $(document).on('click', 'table.members .icon-edit', function() {
 
 });
 
-$(document).on('click', '#cancel_member', function() {
+$(document).on('click', '#cancel_member', function(event) {
+    event.stopImmediatePropagation();
     var billable_status = $(this).closest('tr').find("#member_billable_status").val();
     //alert(billable_status);
     var member_id = $(this).attr("member_id");
@@ -76,5 +85,19 @@ $(document).on('click', '#cancel_member', function() {
 
     $(this).closest('tr').find("#user_billable").attr("disabled", true);
     return false;
+
+});
+
+$(document).on('click', '#billable', function(event) {
+    event.stopImmediatePropagation();
+
+    if($(this).val()) {
+        $("#new_membership").find('[name=commit]').attr("disabled", false);
+    }
+    else{
+        alert("Error:Please Select Billable Or NonBillable")
+        $("#new_membership").find('[name=commit]').attr("disabled", true);
+    }
+
 
 });
