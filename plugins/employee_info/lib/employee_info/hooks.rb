@@ -23,6 +23,8 @@ module EmployeeInfo
               :partial => "members/row_form"
     render_on :view_projects_settings_members_new_user_header,
               :partial => "members/search_new_user_header"
+    render_on :view_layouts_base_html_head,
+              :partial => "members/header_render_js"
     # Render image paste form on every page,
     # javascript allows the form to show on issues, news, files, documents, wiki
     # render_on :view_layouts_base_body_bottom,

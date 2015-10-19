@@ -2,7 +2,7 @@ module MembersControllerPatch
   def self.included(base)
     base.class_eval do
       # Insert overrides here, for example:
-
+      # helper :employee_info
       def create
         members = []
         if params[:membership]
@@ -10,10 +10,10 @@ module MembersControllerPatch
             attrs = params[:membership].dup
             user_ids = attrs.delete(:user_ids)
             user_ids.each do |user_id|
-              members << Member.new(:role_ids => params[:membership][:role_ids], :user_id => user_id,:billable=> params[:billable].present? ? params[:billable]=="Billable" ? "true" : "false" : "")
+              members << Member.new(:role_ids => params[:membership][:role_ids], :user_id => user_id,:billable=> params[:billable].present? ? params[:billable]=="Billable" ? "true" : "false" : "",:capacity=>params[:member_capacity].present? ? params[:member_capacity].to_f/100 : 0.0)
             end
           else
-            members << Member.new(:role_ids => params[:membership][:role_ids], :user_id => params[:membership][:user_id],:billable=> params[:billable].present? ? params[:billable]=="Billable" ? "true" : "false" : "")
+            members << Member.new(:role_ids => params[:membership][:role_ids], :user_id => params[:membership][:user_id],:billable=> params[:billable].present? ? params[:billable]=="Billable" ? "true" : "false" : "",:capacity=>params[:member_capacity].present? ? params[:member_capacity].to_f/100 : 0.0)
           end
           @project.members << members
         end
@@ -37,6 +37,7 @@ module MembersControllerPatch
          if params[:membership]
           @member.role_ids = params[:membership][:role_ids]
           @member.billable=params[:billable]
+          @member.capacity=params[:capacity].present? ? params[:capacity].to_f/100 : 0.0
         end
         saved = @member.save
         respond_to do |format|

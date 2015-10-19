@@ -28,6 +28,9 @@ Rails.configuration.to_prepare do
  unless Member.included_modules.include? EmployeeInfo::Patches::MemberPatch
    Member.send(:include, EmployeeInfo::Patches::MemberPatch)
  end
+ unless ApplicationHelper.included_modules.include?(EmployeeInfoHelper)
+   ApplicationHelper.send(:include, EmployeeInfoHelper)
+ end
 end
 
 ActionDispatch::Callbacks.to_prepare do

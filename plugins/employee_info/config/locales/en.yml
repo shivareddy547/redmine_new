@@ -2,3 +2,4 @@
 en:
   # my_label: "My label"
   billable_label: "Is billable"
+  capacity_label: "Capacity"
