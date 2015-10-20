@@ -48,6 +48,33 @@ module EmployeeInfo
       end
 
     end
+
+
+    module ApplicationHelperPatch
+      def self.included(base)
+        # base.extend(ClassMethods)
+        # base.send(:include, InstanceMethods)
+        base.class_eval do
+          unloadable
+
+          def principals_check_box_tags(name, principals)
+
+            s = ''
+            principals.each do |principal|
+              s << "<label>#{ check_box_tag name, principal.id, false, :id => "member_ship_check",:member_available_value=> Member.user_available_capacity(principal),:member_available=> Member.user_available_capacity(principal) > 0 ? true : false } #{h principal} (Available: #{Member.user_available_capacity(principal)}%)</label>\n"
+            end
+            s.html_safe
+          end
+
+        end
+      end
+
+
+    end
+
+
+
+
   end
 end
 
