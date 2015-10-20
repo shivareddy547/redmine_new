@@ -22,6 +22,8 @@ class UserOfficialInfo < ActiveRecord::Base
      user_info = UserOfficialInfo.find_or_create_by_user_id(:user_id=>user_id)
      user_info.employee_id=employee_id
      user_info.save
-   end
+  end
+
+
 
 end

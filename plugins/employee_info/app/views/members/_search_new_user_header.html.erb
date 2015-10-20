@@ -1,2 +1,41 @@
 <label for="billable">Is Billable<span class="required"> *</span></label>
-<%= select_tag "billable", options_for_select(["Billable", "NonBillable" ], "") ,include_blank: true %>
+<%= select_tag "billable", options_for_select(["Billable", "Non Billable" ], "") ,prompt: "--select--" %>
+<%= hidden_field_tag 'member_capacity', "" %>
+<label for="billable">Capacity:<span class="required"> *</span></label>
+<div id="div_member_capacity_slider"></div></br>
+
+
+<script>
+
+
+    $( document ).ready(function() {
+        var tooltip = $('<div id="tooltip" />').css({
+            position: 'absolute',
+            top: -25,
+            left: -10
+        }).hide();
+
+        $("form#new_membership #div_member_capacity_slider").slider({
+            range: "min",
+            step: 25,
+            value: 0,
+            min: 0,
+            max: 100,
+            slide: function (event, ui) {
+                tooltip.text(ui.value);
+            $(this).find("input#member_capacity" ).val(ui.value);
+
+            },
+            change: function (event, ui) {
+            }
+        }).find(".ui-slider-handle").append(tooltip).hover(function () {
+                    tooltip.show();
+                }, function () {
+                    tooltip.hide();
+                }
+        );
+    });
+
+
+
+</script>

@@ -1,0 +1,109 @@
+$('#tab-content-members').html('<%= escape_javascript(render :partial => 'projects/settings/members') %>');
+hideOnLoad();
+$("#member-<%= @member.id %>").effect("highlight");
+var error_messages="<%= @member.errors.count %>";
+
+if(error_messages > 0)
+{
+ $('#member-<%= @member.id %>-roles-form').show();
+ $('#member-<%= @member.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", false);
+}
+else
+{
+    $('#member-<%= @member.id %>-roles-form').hide();
+    $('#member-<%= @member.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", true);
+}
+
+
+
+$( document ).ready(function() {
+    // Handler for .ready() called.
+
+    $(".list.members #member_capacity").each(function() {
+
+        var current_capacity = $(this).find("input#current_capacity").val();
+        var available_capacity = $(this).find("input#available_capacity").val();
+        var other_capacity = $(this).find("input#other_capacity").val();
+        var element = $(this);
+        var member_id= $(this).find("input#member_id").val();
+        /* slider tooltip */
+        var tooltip = $('<div id="tooltip" />').css({
+            position: 'absolute',
+            top: -25,
+            left: -10
+        }).hide();
+
+        /* Google chart options */
+        var options = {
+            width: 200,
+            height: 200,
+            backgroundColor: "#ffffdd",
+            pieHole: 0.3,
+            pieSliceText: "value",
+            text: "value",
+            tooltip: {text: "percentage"},
+            pieSliceTextStyle: {
+                color: 'black',
+                bold: true,
+                italic: true,
+                alignment: "center"
+            },
+            colors: ['#FF9933', '#E82D2D', '#006600'],
+            legend: {
+                alignment: 'center', textStyle: {color: 'blue', fontSize: 8}
+            }
+        };
+
+        $(this).find("#div_member_capacity_slider").slider({
+            range: "min",
+            step: 25,
+            value: current_capacity,
+            min: 0,
+            max: 100,
+            slide: function( event, ui ) {
+
+                tooltip.text(ui.value);
+                if(ui.value > (100-other_capacity) )
+                {
+                    return false;
+                }
+                $(element).find("span#selected_capacity" ).text( "Selected: " + ui.value+"%" );
+                $(element).find("input#selected_capacity" ).val(ui.value);
+                $('#member-'+member_id+'-roles-form').find('#member_capacity_'+member_id).val(ui.value);
+                var current_capacity=ui.value;
+                var available_capacity= (100-(parseInt(current_capacity)+parseInt(other_capacity)));
+                var data = google.visualization.arrayToDataTable([
+                    ['Type', 'Value'],
+                    ['Available',     parseInt(available_capacity)],
+                    ['Other',     parseInt(other_capacity)],
+                    ['Assigned',     parseInt(current_capacity)],
+                ]);
+                var chart = new google.visualization.PieChart($("#capacity_chart_"+member_id)[0]);
+                chart.draw(data, options);
+
+            },
+            change: function(event, ui) {}
+        }).find(".ui-slider-handle").append(tooltip).hover(function() {
+                    tooltip.show();
+                }, function() {
+                    tooltip.hide();
+                }
+        );
+        var data = google.visualization.arrayToDataTable([
+            ['Effort', 'Amount given'],
+            ['Available',     parseInt(available_capacity)],
+            ['Other',     parseInt(other_capacity)],
+            ['Assigned',     parseInt(current_capacity)],
+        ]);
+        /* Google chart draw */
+        if(member_id) {
+            var chart = new google.visualization.PieChart($("#capacity_chart_" + member_id)[0]);
+            chart.draw(data, options);
+        }
+        $(element).find("span#selected_capacity" ).text( "Selected" + $(element).find("#div_member_capacity_slider").slider( "value" )+"%" );
+        $(element).find("#div_member_capacity_slider").slider('disable');
+
+    });
+
+
+});
