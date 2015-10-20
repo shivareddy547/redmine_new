@@ -15,3 +15,13 @@
     width: 50%;
     float: left;
 }
+
+
+tr.odd rect {
+    fill: #f6f7f8 !important;
+}
+
+
+tr.even rect {
+    fill: #fff !important;
+}
