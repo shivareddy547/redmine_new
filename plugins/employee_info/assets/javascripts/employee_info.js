@@ -235,6 +235,7 @@ $(document).on('click', 'input#member_ship_check', function() {
             slide: function (event, ui) {
                 tooltip.text(ui.value);
                 $(this).find("input#member_capacity" ).val(ui.value);
+                $("form#new_membership #member_capacity").val(ui.value);
             },
             change: function (event, ui) {
             }

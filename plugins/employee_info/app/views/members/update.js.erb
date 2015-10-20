@@ -107,3 +107,34 @@ $( document ).ready(function() {
 
 
 });
+
+
+$( document ).ready(function() {
+    var tooltip = $('<div id="tooltip" />').css({
+        position: 'absolute',
+        top: -25,
+        left: -10
+    }).hide();
+
+    $("form#new_membership #div_member_capacity_slider").slider({
+        range: "min",
+        step: 25,
+        value: 0,
+        min: 0,
+        max: 100,
+        slide: function (event, ui) {
+            tooltip.text(ui.value);
+            $(this).find("input#member_capacity" ).val(ui.value);
+
+            $("form#new_membership #member_capacity").val(ui.value);
+
+        },
+        change: function (event, ui) {
+        }
+    }).find(".ui-slider-handle").append(tooltip).hover(function () {
+                tooltip.show();
+            }, function () {
+                tooltip.hide();
+            }
+    );
+});
