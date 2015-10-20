@@ -88,7 +88,7 @@ class KanbanPane < ActiveRecord::Base
     #1 I still have space?
     if self.wip_limit_by_view() <= KanbanPane.wip(self)
       puts "wip_limit #{self.wip_limit_by_view()} <= wip #{KanbanPane.wip(self)}"
-      return false 
+      return false
     end
 
     user = user.is_a?(User) ? User.to_user(user) : Group.to_group(user)
