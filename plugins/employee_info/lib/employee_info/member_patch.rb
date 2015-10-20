@@ -6,8 +6,10 @@ module EmployeeInfo
         # base.send(:include, InstanceMethods)
         base.class_eval do
           # validate :validate_billable
+          validates :billable,:inclusion => {:in => [true, false],:message => "Choose Billable or Non Billable"}
           validates_uniqueness_of :billable, :scope => [:user_id], :if => :billable
 
+          validates :capacity,presence:true, numericality: {greater_than: 0}
           def validate_billable
             if !self.billable.present?
                errors.add(:Billable, "can not be blank for #{self.user.firstname.present? ? self.user.firstname : "" }")
@@ -58,7 +60,6 @@ module EmployeeInfo
           unloadable
 
           def principals_check_box_tags(name, principals)
-
             s = ''
             principals.each do |principal|
               s << "<label>#{ check_box_tag name, principal.id, false, :id => "member_ship_check",:member_available_value=> Member.user_available_capacity(principal),:member_available=> Member.user_available_capacity(principal) > 0 ? true : false } #{h principal} (Available: #{Member.user_available_capacity(principal)}%)</label>\n"

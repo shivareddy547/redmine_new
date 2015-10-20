@@ -1,6 +1,6 @@
 class UserOfficialInfo < ActiveRecord::Base
   unloadable
-  belongs_to :user
+  belongs_to :user,dependent: :destroy
   validates :employee_id, :presence => true,length: { maximum: 8 }
 
   def self.update_employee_ids
