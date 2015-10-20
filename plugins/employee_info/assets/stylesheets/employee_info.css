@@ -17,11 +17,19 @@
 }
 
 
-tr.odd rect {
+tr.odd rect  {
     fill: #f6f7f8 !important;
 }
-
 
 tr.even rect {
     fill: #fff !important;
 }
+
+
+tr:hover rect  {
+    fill: #ffffdd !important;
+}
+
+
+
+
