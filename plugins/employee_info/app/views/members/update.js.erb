@@ -3,18 +3,6 @@ hideOnLoad();
 $("#member-<%= @member.id %>").effect("highlight");
 var error_messages="<%= @member.errors.count %>";
 
-if(error_messages > 0)
-{
- $('#member-<%= @member.id %>-roles-form').show();
- $('#member-<%= @member.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", false);
-}
-else
-{
-    $('#member-<%= @member.id %>-roles-form').hide();
-    $('#member-<%= @member.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", true);
-}
-
-
 
 $( document ).ready(function() {
     // Handler for .ready() called.
@@ -138,3 +126,15 @@ $( document ).ready(function() {
             }
     );
 });
+
+if(error_messages > 0)
+{
+    $('#member-<%= @member.id %>-roles-form').show();
+    $('#member-<%= @member.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", false);
+    $('#member-<%= @member.id %>-roles-form').parent().parent().find("#div_member_capacity_slider").slider('enable');
+}
+else
+{
+    $('#member-<%= @member.id %>-roles-form').hide();
+    $('#member-<%= @member.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", true);
+}

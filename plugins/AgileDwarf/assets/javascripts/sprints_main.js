@@ -522,7 +522,7 @@
                     delete sprintInlineOpts.callback;
                     delete sprintInlineOpts.disableDatapicker;
                     $('.sprint_end, .sprint_start, .sprint_name', el).editable('destroy');
-//                    addSprintInlines();
+                    addSprintInlines();
                     sprint.element.removeClass('new');
                 }
             };
@@ -546,7 +546,7 @@
                 $('.sprint_start form :input:visible:first').datepicker('enable');
             }
         }
-//        addSprintInlines(isNew);
+        addSprintInlines(isNew);
 
         // drag and drop support
         Sprints.bindDnD(function(newList, params, oldList, item)
