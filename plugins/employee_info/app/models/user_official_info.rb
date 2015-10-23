@@ -6,9 +6,7 @@ class UserOfficialInfo < ActiveRecord::Base
   def self.update_employee_ids
    # Active users employee id updation
     User.active.flatten.each do |user|
-      user.custom_field_values.each_wi
-      .
-          th_index do |c,index|
+      user.custom_field_values.each_with_index do |c,index|
         custom_field =CustomField.where(:id=>c.custom_field_id)
         if custom_field.present? && (custom_field.last.name=="Emp_code") && user.custom_field_values[index].to_s.present?
 
