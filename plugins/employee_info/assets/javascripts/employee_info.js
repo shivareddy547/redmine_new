@@ -55,6 +55,7 @@ $(document).on('click', 'table.members .icon-edit', function(event) {
     var member_id = $(this).closest('tr').find("#member_billable_status").attr("member_id");
     $('#member-'+member_id+'-roles-form').find('a').attr('id', 'cancel_member');
     $('#member-'+member_id+'-roles-form').find('a').attr('member_id', member_id);
+    $(this).closest('tr').find("#div_member_capacity_slider").show();
     $(this).closest('tr').find("#div_member_capacity_slider").slider('enable');
     //console.log(billable_status);
     //console.log(member_id);
@@ -86,6 +87,7 @@ $(document).on('click', '#cancel_member', function(event) {
 //    $(this).closest('tr').find("#").attr("disabled", true);
     console.log($(this).closest('tr').find("#div_member_capacity_slider"))
     $(this).closest('tr').find("#div_member_capacity_slider").slider('disable');
+    $(this).closest('tr').find("#div_member_capacity_slider").hide();
     return false;
 
 });
@@ -111,6 +113,9 @@ $(document).on('change', '#billable', function(event) {
 //});
 
 
+/* Loading chart Handile bar */
+
+
 $( document ).ready(function() {
     // Handler for .ready() called.
 
@@ -130,28 +135,31 @@ $( document ).ready(function() {
 
 /* Google chart options */
         var options = {
-            width: 200,
-            height: 200,
+            width: 100,
+            height: 100,
             backgroundColor: "#ffffdd",
             pieHole: 0.3,
             pieSliceText: "value",
+            pieStartAngle: 100,
             text: "value",
             tooltip: {text: "percentage"},
+            chartArea:{left: 0,top: 0,width: "100%",height: "100%"},
             pieSliceTextStyle: {
                 color: 'black',
                 bold: true,
                 italic: true,
-                alignment: "center"
-                    },
+                alignment: 'center'
+
+            },
             colors: ['#FF9933', '#E82D2D', '#006600'],
             legend: {
-                alignment: 'center', textStyle: {color: 'blue', fontSize: 8}
+                position: 'left', textStyle: {color: 'blue', fontSize: 8}
             }
         };
 
         $(this).find("#div_member_capacity_slider").slider({
             range: "min",
-            step: 25,
+            step: 5,
             value: current_capacity,
             min: 0,
             max: 100,
@@ -183,9 +191,11 @@ $( document ).ready(function() {
             }, function() {
                 tooltip.hide();
             }
+
         );
+//        $(this).find("#div_member_capacity_slider").hide();
         var data = google.visualization.arrayToDataTable([
-            ['Effort', 'Amount given'],
+            ['Type', 'Value'],
             ['Available',     parseInt(available_capacity)],
             ['Other',     parseInt(other_capacity)],
             ['Assigned',     parseInt(current_capacity)],
@@ -194,6 +204,60 @@ $( document ).ready(function() {
         if(member_id) {
             var chart = new google.visualization.PieChart($("#capacity_chart_" + member_id)[0]);
             chart.draw(data, options);
+            google.visualization.events.addListener(chart, 'click', function(e) {
+                var match_sting = e.targetID.match(/slice#/g);
+                if(match_sting)
+                {
+                    var position = e.targetID.split("#").last
+                }
+                 if(e.targetID.split("#")[1]==1)
+                 {
+                    var position = e.targetID.split("#").last
+                    $.ajax({
+                         url: "/employee_info/get_capacity_details_of_other_project", // Route to the Script Controller method
+                         type: "POST",
+                         dataType: "json",
+                         data: {member_id:member_id},
+                         // This goes to Controller in params hash, i.e. params[:file_name]
+                         complete: function () {
+                         },
+                         success: function (data) {
+                             if($("#member-"+data.member_id+" td").last().find("#OtherCapacitypopupWindow").dialog( "isOpen" ))
+                                {
+                                    $("#member-"+data.member_id+" td").last().find("#OtherCapacitypopupWindow").dialog( "close" );
+                                    $("#member-"+data.member_id+" td").last().find("#OtherCapacitypopupWindow").remove();
+                                }
+                                 $("#member-"+data.member_id+" td").last().append(data.CapacityDetailsPartial);
+                                  $("#OtherCapacitypopupWindow").dialog({
+                                     autoOpen: true,
+                                     width: "500px",
+                                     draggable: false
+
+                                 });
+                         }
+
+                     });
+                 }
+
+           });
+            google.visualization.events.addListener(chart, 'onmouseover', barMouseOver);
+            google.visualization.events.addListener(chart, 'onmouseout', barMouseOut);
+
+        }
+
+        function barMouseOver(e) {
+            if(e.row == 1)
+            {
+                $("#capacity_chart_"+member_id).css('cursor','pointer');
+            }
+        }
+
+        function barMouseOut(e) {
+            if(e.row == 1)
+            {
+                $("#capacity_chart_"+member_id).css('cursor','');
+            }
+
         }
         $(element).find("span#selected_capacity" ).text( "Selected" + $(element).find("#div_member_capacity_slider").slider( "value" )+"%" );
         $(element).find("#div_member_capacity_slider").slider('disable');
@@ -228,7 +292,7 @@ $(document).on('click', 'input#member_ship_check', function() {
 
         $("form#new_membership #div_member_capacity_slider").slider({
             range: "min",
-            step: 25,
+            step: 5,
             value: member_available_value,
             min: 0,
             max: 100,
@@ -253,7 +317,7 @@ $(document).on('click', 'input#member_ship_check', function() {
 
     if(parseInt(member_available_value) < parseInt(available_value))
     {
-        console.log(3333)
+
         $(this).prop('checked', false);
 
     }
@@ -275,3 +339,32 @@ function unique(list) {
 
 
 
+$( document ).ready(function() {
+    var tooltip = $('<div id="tooltip" />').css({
+        position: 'absolute',
+        top: -25,
+        left: -10
+    }).hide();
+
+    $("form#new_membership #div_member_capacity_slider").slider({
+        range: "min",
+        step: 5,
+        value: 0,
+        min: 0,
+        max: 100,
+        slide: function (event, ui) {
+            tooltip.text(ui.value);
+            $(this).find("input#member_capacity" ).val(ui.value);
+
+            $("form#new_membership #member_capacity").val(ui.value);
+
+        },
+        change: function (event, ui) {
+        }
+    }).find(".ui-slider-handle").append(tooltip).hover(function () {
+            tooltip.show();
+        }, function () {
+            tooltip.hide();
+        }
+    );
+});

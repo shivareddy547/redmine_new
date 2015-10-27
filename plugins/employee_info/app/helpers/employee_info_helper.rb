@@ -1,5 +1,3 @@
-
-
 module EmployeeInfoHelper
 
   def capacity(member)
@@ -12,5 +10,6 @@ module EmployeeInfoHelper
     available_capacity = (1-total_capacity)*100
     return available_capacity
   end
+
 
 end
