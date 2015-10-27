@@ -649,9 +649,7 @@ end
     @issue.project = @project
     @issue.author ||= User.current
     # Tracker must be set before custom field values
-    p "++++++++++++++++++pppppppppppppp"
-    p @project
-    @issue.tracker ||= @project.trackers.find((params[:issue] && params[:issue][:tracker_id]) || params[:tracker_id] || :first)
+     @issue.tracker ||= @project.trackers.find((params[:issue] && params[:issue][:tracker_id]) || params[:tracker_id] || :first)
     if @issue.tracker.nil?
       render_error l(:error_no_tracker_in_project)
       return false
