@@ -31,5 +31,5 @@ tr:hover rect  {
 }
 
 
-
-
+div.capacity_slider_inline { float:right; }
+.clearBoth { clear:both; }
