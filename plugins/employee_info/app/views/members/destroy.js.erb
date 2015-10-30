@@ -77,6 +77,8 @@ $( document ).ready(function() {
                     tooltip.hide();
                 }
         );
+
+        $(this).find("#div_member_capacity_slider").show();
         var data = google.visualization.arrayToDataTable([
             ['Type', 'Value'],
             ['Available',     parseInt(available_capacity)],
@@ -198,7 +200,7 @@ $(document).on('click', 'input#member_ship_check', function() {
     console.log(member_available_value)
     console.log(available_value)
 
-    if(parseInt(member_available_value) < parseInt(available_value))
+    if(parseInt(member_available_value) < parseInt(available_value) || parseInt(member_available_value) ==0 )
     {
         console.log(3333)
         $(this).prop('checked', false);
