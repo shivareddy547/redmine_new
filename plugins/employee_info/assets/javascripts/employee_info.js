@@ -193,7 +193,7 @@ $( document ).ready(function() {
             }
 
         );
-//        $(this).find("#div_member_capacity_slider").hide();
+        $(this).find("#div_member_capacity_slider").hide();
         var data = google.visualization.arrayToDataTable([
             ['Type', 'Value'],
             ['Available',     parseInt(available_capacity)],
