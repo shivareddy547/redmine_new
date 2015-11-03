@@ -15,14 +15,11 @@ module EmployeeInfo
         def self.capacity(user)
           total_capacity =  Member.where(:user_id=>user.id).map(&:capacity).sum
           available_capacity = (1-total_capacity)*100
-          return available_capacity
+          return available_capacity.round
         end
 
         end
       end
-
-
-
     end
   end
 end

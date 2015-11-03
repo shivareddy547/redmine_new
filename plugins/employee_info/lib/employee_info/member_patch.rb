@@ -18,37 +18,37 @@ module EmployeeInfo
 
           def self.capacity(member)
             total_capacity =   Member.where(:user_id=>member.user_id).map(&:capacity).sum
-            return total_capacity*100
+            return total_capacity*100.round
           end
 
           def self.available_capacity(member)
             total_capacity =  Member.where(:user_id=>member.user_id).map(&:capacity).sum
             available_capacity = (1-total_capacity)*100
-            return available_capacity
+            return available_capacity.round
           end
           def self.current_project_capacity(member)
             total_capacity =  Member.where(:user_id=>member.user_id,:project_id=>member.project_id).map(&:capacity).sum
-            return total_capacity*100
+            return total_capacity*100.round
           end
 
           def self.other_capacity(member)
             current_capacity =  Member.where(:user_id=>member.user_id,:project_id=>member.project_id).map(&:capacity).sum
             total_capacity =  Member.where(:user_id=>member.user_id).map(&:capacity).sum
             other_capacity = total_capacity.to_f - current_capacity.to_f
-            return other_capacity*100
+            return other_capacity*100.round
           end
 
           def self.user_available_capacity(user)
             total_capacity =  Member.where(:user_id=>user.id).map(&:capacity).sum
             available_capacity = (1-total_capacity)*100
-            return available_capacity
+            return available_capacity.round
           end
 
           def concat_user_name_with_mail
            return "#{self.user.firstname}#{self.user.lastname}<#{self.user.mail}>"
           end
           def used_capacity
-            return self.capacity*100
+            return self.capacity*100.round
           end
 
        end

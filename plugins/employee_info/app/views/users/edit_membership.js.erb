@@ -3,6 +3,7 @@
   $("#member-<%= @membership.id %>").effect("highlight");
 <% else %>
   alert('<%= raw(escape_javascript(l(:notice_failed_to_save_members, :errors => @membership.errors.full_messages.join(', ')))) %>');
+  var error_messages="<%= @membership.errors.count %>";
 <% end %>
 
 
@@ -92,7 +93,7 @@ $( document ).ready(function() {
                 }
         );
 
-        $(this).find("#div_member_capacity_slider").show();
+        $(this).find("#div_member_capacity_slider").hide();
         var data = google.visualization.arrayToDataTable([
             ['Type', 'Value'],
             ['Available',     parseInt(available_capacity)],
@@ -167,7 +168,9 @@ $( document ).ready(function() {
 });
 
 
+
 /* membership checkbox */
+
 
 $( document ).ready(function() {
     var tooltip = $('<div id="tooltip" />').css({
@@ -175,19 +178,23 @@ $( document ).ready(function() {
         top: -25,
         left: -10
     }).hide();
-
+    var user_total_capacity = $("form#user_new_membership #member_total_capacity").val();
     $("form#user_new_membership #div_member_capacity_slider").slider({
         range: "min",
         step: 5,
-        value: 0,
+        value: user_total_capacity,
         min: 0,
         max: 100,
         slide: function (event, ui) {
             tooltip.text(ui.value);
             $(this).find("input#capacity" ).val(ui.value);
 
-
             $("form#user_new_membership #capacity").val(ui.value);
+            console.log(user_total_capacity)
+            if(ui.value > user_total_capacity )
+            {
+                return false;
+            }
 
         },
         change: function (event, ui) {
@@ -207,6 +214,7 @@ if(error_messages > 0)
     $('#member-<%= @membership.id %>-roles-form').show();
     $('#member-<%= @membership.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", false);
     $('#member-<%= @membership.id %>-roles-form').parent().parent().find("#div_member_capacity_slider").slider('enable');
+    $('#member-<%= @membership.id %>-roles-form').parent().parent().find("#div_member_capacity_slider").show();
     var member_id ="<%=@membership.id%>";
     var billable_status = $('#member-'+member_id+'-roles-form').parent().parent().find("#member_billable_status").val();
     var capacity =$('#member-'+member_id+'-roles-form').parent().parent().find("#current_capacity").val();

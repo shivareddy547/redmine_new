@@ -164,12 +164,16 @@ $( document ).ready(function() {
             min: 0,
             max: 100,
             slide: function( event, ui ) {
-
-                tooltip.text(ui.value);
                 if(ui.value > (100-other_capacity) )
                 {
                     return false;
+                    tooltip.text(ui.value);
+
                 }
+                else{
+                    tooltip.text(ui.value);
+                }
+
                 $(element).find("span#selected_capacity" ).text( "Selected: " + ui.value+"%" );
                 $(element).find("input#selected_capacity" ).val(ui.value);
                 $('#member-'+member_id+'-roles-form').find('#member_capacity_'+member_id).val(ui.value);
@@ -277,7 +281,7 @@ $(document).on('click', 'input#member_ship_check', function() {
     console.log(searchIDs.length);
     var uniq_result=unique(searchIDs)
 //    console.log(uniq_result);
-    console.log(searchIDs.count)
+//    console.log(searchIDs.count)
     if(searchIDs.length == 1)
     {
         var tooltip = $('<div id="tooltip" />').css({
@@ -297,14 +301,33 @@ $(document).on('click', 'input#member_ship_check', function() {
             min: 0,
             max: 100,
             slide: function (event, ui) {
-                tooltip.text(ui.value);
+//                tooltip.text(ui.value);
                 $(this).find("input#member_capacity" ).val(ui.value);
                 $("form#new_membership #member_capacity").val(ui.value);
+                var available_value = $("form#new_membership #member_capacity").val();
+                var searchIDs = $("input:checkbox:checked").map(function(){
+                    return $(this).attr("member_available_value");
+                }).get();
+//                console.log(searchIDs)
+                if(searchIDs.length) {
+                    var initsearchIDs = searchIDs.map(function (e) {
+                        return parseInt(e)
+                    })
+                    var minvalue = Math.min.apply(null, initsearchIDs);
+                    console.log(minvalue)
+                    if (ui.value > minvalue) {
+                        tooltip.text(minvalue);
+                        return false;
+                    }
+                }
+
             },
             change: function (event, ui) {
             }
+
         }).find(".ui-slider-handle").append(tooltip).hover(function () {
                 tooltip.show();
+
             }, function () {
                 tooltip.hide();
             }
@@ -317,9 +340,7 @@ $(document).on('click', 'input#member_ship_check', function() {
 
     if(parseInt(member_available_value) < parseInt(available_value) || parseInt(member_available_value)==0)
     {
-
         $(this).prop('checked', false);
-
     }
 
     if(uniq_result.count > 1)
@@ -357,6 +378,14 @@ $( document ).ready(function() {
             $(this).find("input#member_capacity" ).val(ui.value);
 
             $("form#new_membership #member_capacity").val(ui.value);
+            var available_value = $("form#new_membership #member_capacity").val();
+            console.log(available_value);
+            if(ui.value > available_value )
+            {
+                return false;
+                tooltip.text(ui.value);
+
+            }
 
         },
         change: function (event, ui) {
