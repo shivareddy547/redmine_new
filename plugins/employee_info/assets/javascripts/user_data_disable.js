@@ -22,8 +22,17 @@ $( document ).ready(function() {
             }
         }
     );
-    $('div#content a.icon-del').hide();
-    $('div#content a.icon-add').hide();
-    $('div#content tr.user td.buttons a.icon-del').hide();
+
+    var href_for_new_user = $('div#content a.icon-add').attr("href");
+
+    if(href_for_new_user=="/users/new")
+    {
+      $('div#content a.icon-add').hide();
+      $('div#content tr.user td.buttons a.icon-del').hide();
+    }
+    if($('div#content a.icon-del').parent().find('a').first().text() == "Profile")
+    {
+        $('div#content a.icon-del').hide();
+    }
 
 });

@@ -78,11 +78,27 @@ module UsersControllerPatch
           @user.password = @user.password_confirmation = nil
 
           respond_to do |format|
-            format.html { render :action => :edit }
+            format.h
+            tml { render :action => :edit }
             format.api  { render_validation_errors(@user) }
           end
         end
       end
+
+
+     def edit_membership
+       @membership = Member.edit_membership(params[:membership_id], params[:membership], @user)
+       if params[:membership]
+         @membership.role_ids = params[:membership][:role_ids]
+         @membership.billable=params[:billable]
+         @membership.capacity=params[:capacity].present? ? params[:capacity].to_f/100 : 0.0
+       end
+       @membership.save
+       respond_to do |format|
+         format.html { redirect_to edit_user_path(@user, :tab => 'memberships') }
+         format.js
+       end
+     end
 
 
   end
