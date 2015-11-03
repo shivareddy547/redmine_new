@@ -64,7 +64,11 @@ class KanbanCardsController < ApplicationController
       end
     end
     # @issue = Issue.find(params[:issue_id])
+    p params[:issue_id]
     @card = KanbanCard.find_by_issue_id(params[:issue_id])
+    p "+++++++++++++++++===@card+++++++++=@card+++++++++++"
+    p @card
+    p "++++++++++++++end +++++++++++"
     old_card = @card.dup
 
     # @journal = @issue.init_journal(User.current, params[:comment][:notes])
