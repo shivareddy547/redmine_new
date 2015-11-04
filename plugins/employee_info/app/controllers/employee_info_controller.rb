@@ -15,7 +15,7 @@ class EmployeeInfoController < ApplicationController
      @collect_other_project_capacity =[]
      other_projects.each do |each_project|
      collect_member_emails =[]
-     members = Member.find_by_sql("select * from members inner join member_roles on members.id = member_roles.member_id where members.project_id in (#{each_project.id}) AND members.user_id NOT in (#{member.user_id}) AND member_roles.role_id IN (#{manager_role_id.id})")
+     members = Member.find_by_sql("select * from members inner join member_roles on members.id = member_roles.member_id where members.project_id in (#{each_project.id})  AND member_roles.role_id IN (#{manager_role_id.id})")
      # concat_user_name_with_mail << {project_id=>}
      members.each do |each_member|
        collect_member_emails << each_member.concat_user_name_with_mail

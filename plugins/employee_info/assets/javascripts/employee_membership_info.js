@@ -285,14 +285,24 @@ $( document ).ready(function() {
         min: 0,
         max: 100,
         slide: function (event, ui) {
-            tooltip.text(ui.value);
+
             $(this).find("input#capacity" ).val(ui.value);
 
             $("form#user_new_membership #capacity").val(ui.value);
             console.log(user_total_capacity)
             if(ui.value > user_total_capacity )
             {
+//                tooltip.text(ui.value);
+//                cons
+// ole.log(ui)
+                $(this).find("input#capacity" ).val(user_total_capacity);
+                $("form#user_new_membership #capacity").val(user_total_capacity);
+                $(this).find('#tooltip').last().text(user_total_capacity)
                 return false;
+            }
+            else
+            {
+                tooltip.text(ui.value);
             }
 
         },

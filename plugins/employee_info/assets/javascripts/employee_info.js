@@ -301,24 +301,32 @@ $(document).on('click', 'input#member_ship_check', function() {
             min: 0,
             max: 100,
             slide: function (event, ui) {
-//                tooltip.text(ui.value);
                 $(this).find("input#member_capacity" ).val(ui.value);
                 $("form#new_membership #member_capacity").val(ui.value);
                 var available_value = $("form#new_membership #member_capacity").val();
                 var searchIDs = $("input:checkbox:checked").map(function(){
                     return $(this).attr("member_available_value");
                 }).get();
-//                console.log(searchIDs)
                 if(searchIDs.length) {
                     var initsearchIDs = searchIDs.map(function (e) {
                         return parseInt(e)
                     })
                     var minvalue = Math.min.apply(null, initsearchIDs);
                     console.log(minvalue)
-                    if (ui.value > minvalue) {
-                        tooltip.text(minvalue);
-                        return false;
                     }
+                if (ui.value > minvalue) {
+                    tooltip.text(ui.value);
+                    console.log(ui)
+                    $(this).find("input#member_capacity" ).val(minvalue);
+                    $("form#new_membership #member_capacity").val(minvalue);
+                    $(this).find('#tooltip').last().text(minvalue)
+                    return false;
+                }
+                else
+                {
+                    $(this).find("input#member_capacity" ).val(ui.value);
+                    $("form#new_membership #member_capacity").val(ui.value);
+                    $(this).find('#tooltip').last().text(ui.value)
                 }
 
             },
