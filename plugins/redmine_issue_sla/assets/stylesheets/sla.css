@@ -1,0 +1,36 @@
+#response_area{
+    display: none;
+}
+.select_all{
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+table.list th{
+    text-align: center;
+}
+
+#back_to_trackes{
+    float: right;
+    margin-right: 27%;
+}
+.select_tracker{
+    background-color: #f6f6f6;
+    color: #505050;
+    line-height: 1.5em;
+    border: 1px solid #e4e4e4;
+    margin-left: 32%;
+    margin-right: 46%;
+    margin-top: 8%;
+    height: 162px;
+}
+#tracker_id{
+    margin-top: 5%;
+    margin-left: 16%;
+}
+#apply_tracker{
+    margin-left: 23%;
+}
+#tracker_lable{
+    margin-left: 10%;
+    margin-top: 10%;
+}
