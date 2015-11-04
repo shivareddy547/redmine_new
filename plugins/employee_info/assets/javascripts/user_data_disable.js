@@ -32,6 +32,6 @@ if( $('div#content a.icon-add').attr("href") ==  "/users/new" ) {
 
 }
     if ($('div#content a.icon-del').parent().find('a').first().text() == "Profile") {
-        $('div#content a.icon-del').first().hide();
+//        $('div#content a.icon-del').first().hide();
     }
 });
