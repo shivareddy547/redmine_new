@@ -166,8 +166,9 @@ $( document ).ready(function() {
             slide: function( event, ui ) {
                 if(ui.value > (100-other_capacity) )
                 {
+                    $(this).find('#tooltip').last().text((100-other_capacity))
                     return false;
-                    tooltip.text(ui.value);
+//                    tooltip.text(ui.value);
 
                 }
                 else{
@@ -384,15 +385,17 @@ $( document ).ready(function() {
         slide: function (event, ui) {
             tooltip.text(ui.value);
             $(this).find("input#member_capacity" ).val(ui.value);
-
             $("form#new_membership #member_capacity").val(ui.value);
             var available_value = $("form#new_membership #member_capacity").val();
             console.log(available_value);
-            if(ui.value > available_value )
+           if(ui.value > available_value )
             {
+                $(this).find('#tooltip').last().text(available_value)
                 return false;
+//                    tooltip.text(ui.value);
+            }
+            else{
                 tooltip.text(ui.value);
-
             }
 
         },

@@ -1,3 +1,4 @@
+var error_messages=""
 <% if @membership.valid? %>
   $('#tab-content-memberships').html('<%= escape_javascript(render :partial => 'users/memberships') %>');
   $("#member-<%= @membership.id %>").effect("highlight");
@@ -13,9 +14,6 @@
 
 $( document ).ready(function() {
     // Handler for .ready() called.
-
-
-
 
     $(".list.memberships #member_capacity").each(function() {
 
@@ -65,10 +63,14 @@ $( document ).ready(function() {
             max: 100,
             slide: function( event, ui ) {
 
-                tooltip.text(ui.value);
                 if(ui.value > (100-other_capacity) )
                 {
+                    $(this).find('#tooltip').last().text((100-other_capacity))
                     return false;
+                }
+                else
+                {
+                    tooltip.text(ui.value);
                 }
                 $(element).find("span#selected_capacity" ).text( "Selected: " + ui.value+"%" );
                 $(element).find("input#selected_capacity" ).val(ui.value);
@@ -169,6 +171,9 @@ $( document ).ready(function() {
 
 
 
+
+
+
 /* membership checkbox */
 
 
@@ -179,6 +184,8 @@ $( document ).ready(function() {
         left: -10
     }).hide();
     var user_total_capacity = $("form#user_new_membership #member_total_capacity").val();
+    $("form#user_new_membership #capacity").val(user_total_capacity);
+    console.log(user_total_capacity)
     $("form#user_new_membership #div_member_capacity_slider").slider({
         range: "min",
         step: 5,
@@ -186,14 +193,23 @@ $( document ).ready(function() {
         min: 0,
         max: 100,
         slide: function (event, ui) {
-            tooltip.text(ui.value);
+
             $(this).find("input#capacity" ).val(ui.value);
 
             $("form#user_new_membership #capacity").val(ui.value);
             console.log(user_total_capacity)
             if(ui.value > user_total_capacity )
             {
+//                tooltip.text(ui.value);
+//                console.log(ui)
+                $(this).find("input#capacity" ).val(user_total_capacity);
+                $("form#user_new_membership #capacity").val(user_total_capacity);
+                $(this).find('#tooltip').last().text(user_total_capacity)
                 return false;
+            }
+            else
+            {
+                tooltip.text(ui.value);
             }
 
         },
@@ -206,6 +222,7 @@ $( document ).ready(function() {
             }
     );
 });
+
 
 if(error_messages > 0)
 {

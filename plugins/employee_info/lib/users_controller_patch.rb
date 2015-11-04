@@ -90,7 +90,7 @@ module UsersControllerPatch
        @membership = Member.edit_membership(params[:membership_id], params[:membership], @user)
        if params[:membership]
          @membership.role_ids = params[:membership][:role_ids]
-         @membership.billable=params[:billable]
+         @membership.billable=params[:billable]=="Billable" ? "true" : "false"
          @membership.capacity=params[:capacity].present? ? params[:capacity].to_f/100 : 0.0
        end
        @membership.save

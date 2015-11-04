@@ -164,13 +164,17 @@ console.log(current_capacity);
             min: 0,
             max: 100,
             slide: function( event, ui ) {
-
-                tooltip.text(ui.value);
                 if(ui.value > (100-other_capacity) )
                 {
+                   $(this).find('#tooltip').last().text((100-other_capacity))
                     return false;
                 }
-                $(element).find("span#selected_capacity" ).text( "Selected: " + ui.value+"%" );
+                else
+                {
+                    tooltip.text(ui.value);
+                }
+
+               $(element).find("span#selected_capacity" ).text( "Selected: " + ui.value+"%" );
                 $(element).find("input#selected_capacity" ).val(ui.value);
                 $('#member-'+member_id+'-roles-form').find('#member_capacity_'+member_id).val(ui.value);
                 var current_capacity=ui.value;
@@ -278,6 +282,8 @@ $( document ).ready(function() {
         left: -10
     }).hide();
     var user_total_capacity = $("form#user_new_membership #member_total_capacity").val();
+    $("form#user_new_membership #capacity").val(user_total_capacity);
+    console.log(user_total_capacity)
     $("form#user_new_membership #div_member_capacity_slider").slider({
         range: "min",
         step: 5,
@@ -293,8 +299,7 @@ $( document ).ready(function() {
             if(ui.value > user_total_capacity )
             {
 //                tooltip.text(ui.value);
-//                cons
-// ole.log(ui)
+//                console.log(ui)
                 $(this).find("input#capacity" ).val(user_total_capacity);
                 $("form#user_new_membership #capacity").val(user_total_capacity);
                 $(this).find('#tooltip').last().text(user_total_capacity)
