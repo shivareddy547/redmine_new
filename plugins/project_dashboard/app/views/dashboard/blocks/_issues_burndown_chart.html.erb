@@ -1,0 +1,108 @@
+<%#= render_agile_chart(@chart, @issues) if @query.valid? %>
+
+
+
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Burndown Chart</title>
+
+
+</head>
+
+<body>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<script src='http://code.highcharts.com/highcharts.js'></script>
+
+<%= javascript_include_tag 'js/index.js', :plugin => 'ekanban' %>
+<%#= @idle_issues_count_array %>
+<%#= @total_dates.join(", ") %>
+<%#= @issues_count_array %>
+
+
+<input type="hidden" name="usrname" id="usrname" value="<%= @total_dates.join(", ") %>">
+<input type="hidden" name="usrname" id="idle_issues_count" value="<%= @idle_issues_count_array %>">
+<input type="hidden" name="usrname" id="issues_count_array" value="<%= @issues_count_array %>">
+</body>
+</html>
+
+<script>
+
+    var uvalue=$("#usrname").attr("value");
+    var idle_issues_count=$("#idle_issues_count").attr("value");
+    var issues_count_array=$("#issues_count_array").attr("value");
+    //  alert(uvalue.split(','));
+    var total_values=uvalue.split(',');
+    var idle_issues_count=idle_issues_count.split(',');
+    var issues_count_array=issues_count_array.split(',');
+
+    var total_dates=[<%= @total_dates.join(", ") %>]
+    //  alert(b)
+//    var a=['2015-08-30', '2015-08-30', 'Day 3', 'Day 4', 'Day 5', 'Day 6',
+//        'Day 7', 'Day 8', 'Day 9', 'Day 10']
+    //          alert(a)
+//    alert(idle_issues_count)
+//    alert(issues_count_array)
+    $(function () {
+        $('#container').highcharts({
+            title: {
+                text: 'Burndown Chart',
+                x: -20 //center
+            },
+            colors: ['blue', 'red'],
+            plotOptions: {
+                line: {
+                    lineWidth: 3
+                },
+                tooltip: {
+                    hideDelay: 200
+                }
+            },
+            subtitle: {
+                text: 'Sprint 1',
+                x: -20
+            },
+            xAxis: {
+                categories: total_values
+            },
+            yAxis: {
+                title: {
+                    text: 'Hours'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1
+                }]
+            },
+            tooltip: {
+                valueSuffix: ' hrs',
+                crosshairs: true,
+                shared: true
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Ideal Burn',
+                color: 'rgba(255,0,0,0.25)',
+                lineWidth: 2,
+                data: <%= @idle_issues_count_array %>
+            }, {
+                name: 'Actual Burn',
+                color: 'rgba(0,120,200,0.75)',
+                marker: {
+                    radius: 6
+                },
+                data: <%= @issues_count_array %>
+            }]
+        });
+    });
+
+
+</script>
