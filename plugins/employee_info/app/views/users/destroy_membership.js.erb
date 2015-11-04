@@ -1,10 +1,5 @@
 $('#tab-content-memberships').html('<%= escape_javascript(render :partial => 'users/memberships') %>');
 
-
-
-
-
-
 $( document ).ready(function() {
     // Handler for .ready() called.
 
@@ -216,35 +211,3 @@ $( document ).ready(function() {
     );
 });
 
-
-if(error_messages > 0)
-{
-
-//    alert("hfhfhfh")
-    $('#member-<%= @membership.id %>-roles-form').show();
-    $('#member-<%= @membership.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", false);
-    $('#member-<%= @membership.id %>-roles-form').parent().parent().find("#div_member_capacity_slider").slider('enable');
-    $('#member-<%= @membership.id %>-roles-form').parent().parent().find("#div_member_capacity_slider").show();
-    var member_id ="<%=@membership.id%>";
-    var billable_status = $('#member-'+member_id+'-roles-form').parent().parent().find("#member_billable_status").val();
-    var capacity =$('#member-'+member_id+'-roles-form').parent().parent().find("#current_capacity").val();
-
-    $('<input>').attr({
-        type: 'hidden',
-        id: 'member_billable_'+member_id,
-        name: 'billable',
-        value: billable_status
-    }).appendTo('#member-'+member_id+'-roles-form');
-
-    $('<input>').attr({
-        type: 'hidden',
-        id: 'member_capacity_'+member_id,
-        name: 'capacity',
-        value: capacity
-    }).appendTo('#member-'+member_id+'-roles-form');
-}
-else
-{
-    $('#member-<%= @membership.id %>-roles-form').hide();
-    $('#member-<%= @membership.id %>-roles-form').parent().next().find("#user_billable").attr("disabled", true);
-}
