@@ -1,9 +1,7 @@
-
-
 <h3>
   <%= link_to l(:label_overdue_tasks),"#" %>
   <% if controller.action_name =='page_layout' %>
-  <%= link_to image_tag("/images/settings.png", :border=>0),'#', :class => 'overdue_tasks_settings_model' %>
+  <%= link_to image_tag("settings.png" , :plugin => 'project_dashboard', :border=>0),'#', :class => 'overdue_tasks_settings_model' %>
 <% end %>
 </h3>
 

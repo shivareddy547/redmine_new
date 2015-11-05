@@ -301,7 +301,6 @@ module DashboardHelper
   #get unmanagement issues by main project
   def retrieve_dash_board_query
       if !params[:query_id].blank?
-
       cond = "project_id IS NULL"
       cond << " OR project_id = #{@project.id}" if @project
       @query = DashboardQuery.where(cond).find(params[:query_id])
@@ -335,7 +334,69 @@ return save_text_editor_value
 end
 
 
+  def get_issues_burn_down(query,project)
+    p "+++++++++++++++++++++=end +++++++++++++++"
+   p get_sql_for_filter_query = get_sql_for_filter_query(project.id)
+    p "++++++++++++++++=="
+    @project= project
+    dash_board_query = DashboardQuery.where(:project_id=>@project.id)
+    if dash_board_query.present?
+      @query = dash_board_query.first
+    else
+      @query = query
+    end
+    if @query.present? && @query.filters.present? && @query.filters["fixed_version_id"].present?
+      find_fixed_version_id= @query.filters["fixed_version_id"].values.last.first
+      find_version = Version.find(find_fixed_version_id)
+      start_date = find_version.ir_start_date
+      end_date = find_version.ir_end_date
+      total_no_of_days = (start_date.to_date..end_date.to_date).to_a.count
+      @total_dates= (start_date.to_date..end_date.to_date).to_a
+      # dashboard_helper = Object.new.extend(DashboardHelper)
+      get_sql_for_trackers_and_statuses_not = get_sql_for_trackers_and_statuses(@project.id,"issues_burndown_chart")
 
+      @idle_issues_count = @project.issues.where("issues.fixed_version_id IN (#{find_version.id}) #{get_sql_for_filter_query} #{get_sql_for_trackers_and_statuses_not}").count
+      @idle_issues_total_count = @idle_issues_count
+      idle_issues_devide = (@idle_issues_count.to_f/total_no_of_days.to_f)
+
+      @idle_issues_count_array=[]
+      @issues_count_array=[]
+      (start_date.to_date..end_date.to_date).to_a.each_with_index do |each_day,index|
+        if index.to_i ==0
+          @idle_issues_count_array << @idle_issues_count
+        else
+          @idle_issues_count_array << (@idle_issues_count -= idle_issues_devide).round
+        end
+
+        closed_issues = @project.issues.where("fixed_version_id in (#{find_version.id}) #{get_sql_for_trackers_and_statuses_not}").where("closed_on >= ?",each_day.to_date).count
+        # @idle_issues_total_count
+        issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
+        @issues_count_array << issues_count rescue 0
+      end
+    else
+      total_no_of_days= 30
+      start_date = (Date.today-total_no_of_days)
+      end_date = Date.today
+      @total_dates= ((Date.today-30)..Date.today).to_a
+      @idle_issues_count = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").count
+      @idle_issues_total_count = @idle_issues_count
+      idle_issues_devide = (@idle_issues_count.to_f/total_no_of_days.to_f)
+      @idle_issues_count_array=[]
+      @issues_count_array=[]
+      (start_date.to_date..end_date.to_date).to_a.each_with_index do |each_day,index|
+        if index.to_i ==0
+          @idle_issues_count_array << @idle_issues_count
+        else
+          @idle_issues_count_array << (@idle_issues_count -= idle_issues_devide).round
+        end
+        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.closed_on <= ?",Time.parse(each_day.to_date.to_s)).count
+        # @idle_issues_total_count
+        issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
+        @issues_count_array << issues_count rescue 0
+      end
+    end
+    return @total_dates,@idle_issues_count_array,@issues_count_array
+  end
 
 
 end

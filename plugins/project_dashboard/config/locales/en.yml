@@ -67,3 +67,4 @@ en:
     lable_select_status: "Select Status"
     lable_select_tracker: "Select Tracker"
     lable_select_tracker_status: "Select Tracker and Status"
+    label_issues_burn_down_chart: "Issues Burn Down Chart"

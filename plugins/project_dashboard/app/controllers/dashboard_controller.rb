@@ -74,24 +74,60 @@ class DashboardController < ApplicationController
     sort_update(@query.sortable_columns)
 
     @query.sort_criteria = sort_criteria.to_a
+    if @query.present? && @query.filters.present? && @query.filters["fixed_version_id"].present?
+      find_fixed_version_id= @query.filters["fixed_version_id"].values.last.first
+      find_version = Version.find(find_fixed_version_id)
+      start_date = find_version.ir_start_date
+      end_date = find_version.ir_end_date
+      total_no_of_days = (start_date.to_date..end_date.to_date).to_a.count
+      @total_dates= (start_date.to_date..end_date.to_date).to_a
+      @idle_issues_count = @project.issues.where("issues.fixed_version_id IN (#{find_version.id})").count
+      @idle_issues_total_count = @idle_issues_count
+      idle_issues_devide = (@idle_issues_count.to_f/total_no_of_days.to_f)
 
-    start_date = (Date.today-30)
+      @idle_issues_count_array=[]
+      @issues_count_array=[]
+      (start_date.to_date..end_date.to_date).to_a.each_with_index do |each_day,index|
+        if index.to_i ==0
+          @idle_issues_count_array << @idle_issues_count
+        else
+          @idle_issues_count_array << (@idle_issues_count -= idle_issues_devide).round
+        end
 
-
-    @idle_issues_count = Issue.visible.where("issues.status_id IN (SELECT id FROM issue_statuses WHERE is_closed=0) AND issues.tracker_id IN ('1') AND issues.created_on > '#{start_date}'").count
-    idle_issues_devide = @idle_issues_count/30
-    @idle_issues_count_array=[]
-    @issues_count_array=[]
-    (start_date..Date.today).to_a.each do |each_day|
-      @idle_issues_count_array << @idle_issues_count -= idle_issues_devide
-      # p "issues.status_id IN (SELECT id FROM issue_statuses WHERE is_closed=0) AND issues.tracker_id IN ('1') AND issues.created_on > '#{each_day}'"
-
-      issues_count = Issue.visible.where("issues.status_id IN (SELECT id FROM issue_statuses WHERE is_closed=0) AND issues.tracker_id IN ('1') AND issues.created_on > '#{each_day}'").count
-      @issues_count_array << issues_count rescue 0
-
+        # p "issues.status_id IN (SELECT id FROM issue_statuses WHERE is_closed=0) AND issues.tracker_id IN ('1') AND issues.created_on > '#{each_day}'"
+        # issues_count = @project.issues.open.where("issues.status_id IN (SELECT id FROM issue_statuses WHERE is_closed=0) AND issues.fixed_version_id IN (#{find_version.id})").count
+        # p date_obj = Time.parse(each_day.to_date.to_s)
+        closed_issues = @project.issues.where("issues.closed_on <= ? AND issues.fixed_version_id= ?",Time.parse(each_day.to_date.to_s) , find_version.id).count
+        # @idle_issues_total_count
+        issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
+        @issues_count_array << issues_count rescue 0
+      end
+    else
+      total_no_of_days= 30
+      start_date = (Date.today-total_no_of_days)
+      end_date = Date.today
+      @total_dates= ((Date.today-30)..Date.today).to_a
+      @idle_issues_count = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").count
+      @idle_issues_total_count = @idle_issues_count
+      idle_issues_devide = (@idle_issues_count.to_f/total_no_of_days.to_f)
+      @idle_issues_count_array=[]
+      @issues_count_array=[]
+      (start_date.to_date..end_date.to_date).to_a.each_with_index do |each_day,index|
+        if index.to_i ==0
+          @idle_issues_count_array << @idle_issues_count
+        else
+          @idle_issues_count_array << (@idle_issues_count -= idle_issues_devide).round
+        end
+        # p "issues.status_id IN (SELECT id FROM issue_statuses WHERE is_closed=0) AND issues.tracker_id IN ('1') AND issues.created_on > '#{each_day}'"
+        # issues_count = @project.issues.open.where("issues.status_id IN (SELECT id FROM issue_statuses WHERE is_closed=0) AND issues.fixed_version_id IN (#{find_version.id})").count
+        # p date_obj = Time.parse(each_day.to_date.to_s)
+        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.closed_on <= ?",Time.parse(each_day.to_date.to_s)).count
+        # @idle_issues_total_count
+        issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
+        @issues_count_array << issues_count rescue 0
+      end
     end
-     @total_dates= ((Date.today-30)..Date.today).to_a
-    # @total_dates= @total_dates
+
     if @query.valid?
       case params[:format]
         when 'csv', 'pdf'
