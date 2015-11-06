@@ -367,8 +367,12 @@ end
         else
           @idle_issues_count_array << (@idle_issues_count -= idle_issues_devide).round
         end
-
-        closed_issues = @project.issues.where("fixed_version_id in (#{find_version.id}) #{get_sql_for_trackers_and_statuses_not}").where("closed_on >= ?",each_day.to_date).count
+p "+++++++++++each_day+++++++++++"
+        p each_day
+        p find_version
+        p "++++++++++++=end +++++++++="
+       p closed_issues = @project.issues.where("fixed_version_id in (#{find_version.id}) #{get_sql_for_trackers_and_statuses_not}").where("start_date <= ?",(each_day.to_date)).count
+       p "================"
         # @idle_issues_total_count
         issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
         @issues_count_array << issues_count rescue 0

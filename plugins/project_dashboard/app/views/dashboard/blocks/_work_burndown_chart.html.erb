@@ -1,10 +1,6 @@
 <%#= render_agile_chart(@chart, @issues) if @query.valid? %>
 <%  dashboard_helper = Object.new.extend(DashboardHelper) %>
-<% @total_dates,@idle_issues_count_array,@issues_count_array = dashboard_helper.get_issues_burn_down(@query,@project) %>
-
-<%= @total_dates %>
-<%= @idle_issues_count_array %>
-<%= @issues_count_array %>
+<% @total_dates,@idle_issues_count_array,@issues_count_array = dashboard_helper.get_work_burn_down(@query,@project) %>
 <h3>
   <%= link_to l(:label_issues_burn_down_chart),"#" %>
   <% if controller.action_name =='page_layout' %>
