@@ -9,7 +9,10 @@ module ProjectsControllerPatch
              'documents' => :label_document_plural,
              'timelog' => :label_spent_time,
              'overduetasks' => :label_overdue_tasks,
-             'unmanageabletasks' => :label_unmanageable_tasks
+             'unmanageabletasks' => :label_unmanageable_tasks,
+             'issues_burndown_chart' => :label_issues_burndown_chart,
+             'work_burndown_chart' => :label_work_burndown_chart,
+             'texteditor' => :label_texteditor
   }.merge(Redmine::Views::MyPage::Block.additional_blocks).freeze
 
   DEFAULT_LAYOUT = {  'left' => ['issuesassignedtome'],
