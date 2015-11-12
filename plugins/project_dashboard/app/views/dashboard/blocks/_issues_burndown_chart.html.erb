@@ -9,7 +9,7 @@
       <%= link_to image_tag("settings.png", :plugin => 'project_dashboard',:border=>0),'#', :class => 'issues_burn_down_chart_settings_model' %>
   <% end %>
 </h3>
-<script src='https://code.highcharts.com/highcharts.js'></script>
+<%= javascript_include_tag 'highcharts', :plugin => 'project_dashboard' %>
 <%= javascript_include_tag 'js/index.js', :plugin => 'ekanban' %>
 <input type="hidden" name="usrname" id="usrname" value="<%= @total_dates.join(", ") %>">
 <input type="hidden" name="usrname" id="idle_issues_count" value="<%= @idle_issues_count_array %>">
