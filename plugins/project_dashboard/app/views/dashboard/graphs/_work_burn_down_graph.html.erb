@@ -9,6 +9,9 @@
     var total_values=uvalue.split(',');
     var idle_issues_count=idle_issues_count.split(',');
     var issues_count_array=issues_count_array.split(',');
+    var total_spent_hours = "<%= @total_spent_hours %>"
+    var total_estimation_hours = "<%= @total_estimation_hours %>"
+
 
     var total_dates=[<%= @total_dates.join(", ") %>]
     $(function () {
@@ -31,7 +34,7 @@
                 }
             },
             subtitle: {
-                text: 'Sprint 1',
+                text: 'Sprint 1(Estimated Hours:'+total_estimation_hours+'hr AND Spent Hours: '+total_spent_hours+'hr )',
                 x: -20
             },
             xAxis: {

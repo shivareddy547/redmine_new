@@ -455,6 +455,7 @@ end
       # end_date = find_version.ir_end_date
       total_no_of_days = (start_date.to_date..end_date.to_date).to_a.count
       @total_dates= (start_date.to_date..end_date.to_date).to_a
+
       # dashboard_helper = Object.new.extend(DashboardHelper)
       # get_sql_for_trackers_and_statuses = get_sql_for_trackers_and_statuses(@project.id,"work_burndown_chart")
       get_sql_for_trackers_and_statuses = get_sql_for_trackers_and_statuses(@project.id,"work_burndown_chart")
@@ -464,9 +465,15 @@ end
  (#{find_versions.map(&:id).join(',')}) #{get_sql_for_filter_query} #{get_sql_for_only_trackers}")
       if @idle_issues.present?
        @idle_issues_hours_count =@idle_issues.map(&:estimated_hours).compact.sum
-      else
+       @total_estimation_hours = @idle_issues.map(&:estimated_hours).compact.sum
+       @total_spent_hours = TimeEntry.where(:spent_on=> @total_dates,:issue_id=>@idle_issues.map(&:id)).map(&:hours).compact.sum
+
+     else
         @idle_issues_hours_count =0
       end
+
+
+
       @idle_issues_total_count = @idle_issues_hours_count
       if @idle_issues_hours_count.to_i > total_no_of_days.to_i
         idle_issues_devide = (@idle_issues_hours_count.to_f/total_no_of_days.to_f)
@@ -488,7 +495,7 @@ end
         sprint_issues = @project.issues.where("fixed_version_id IN (#{find_versions.map(&:id).join(',')})")
         if sprint_issues.present?
           # closed_issues = closed_issu.map(&:hours).compact.sum
-          time_entries = TimeEntry.where(:spent_on=> each_day.to_date,:issue_id=>sprint_issues.map(&:id)).map(&:hours).compact.sum
+          time_entries = TimeEntry.where(:spent_on=> start_date.to_date..each_day.to_date,:issue_id=>sprint_issues.map(&:id)).map(&:hours).compact.sum
         else
           time_entries=0
         end
@@ -517,7 +524,7 @@ end
         @issues_hours_count_array << issues_count rescue 0
       end
     end
-    return @total_dates,@idle_issues_hours_count_array,@issues_hours_count_array
+    return @total_dates,@idle_issues_hours_count_array,@issues_hours_count_array,@total_estimation_hours,@total_spent_hours
   end
 
 
