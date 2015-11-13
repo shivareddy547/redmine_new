@@ -12,6 +12,7 @@ module ProjectsControllerPatch
              'unmanageabletasks' => :label_unmanageable_tasks,
              'issues_burndown_chart' => :label_issues_burndown_chart,
              'work_burndown_chart' => :label_work_burndown_chart,
+             'story_burndown_chart' => :label_story_burndown_chart,
              'texteditor' => :label_texteditor
   }.merge(Redmine::Views::MyPage::Block.additional_blocks).freeze
 
