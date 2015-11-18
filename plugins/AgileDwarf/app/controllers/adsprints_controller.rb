@@ -186,12 +186,18 @@ class AdsprintsController < ApplicationController
       respond_to do |format|
         format.html { render :action => 'new' }
         # format.api  { render_validation_errors(@issue) }
+        @errors=""
+        @issue.errors.full_messages.each do |s|
+          @errors += ("<li>"+s+"</li>")
+        end
         format.js {
-          @errors = ""
-          render :json => {
-                     :errors=> @issue.errors.full_messages.each {|s| @errors += (s + "</br>")}
-                 }
+            render :json => {
+                     :errors=> @errors
+              }
         }
+
+
+
       end
     end
   end

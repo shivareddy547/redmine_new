@@ -1,13 +1,8 @@
-<div id="issue_errors">
-  <div id="divError" style="display:none" >
-    <font color="red">
+<div id="errorExplanation" style="display:none;"><ul>
+</ul></div>
 
-    </font>
-
-  </div>
-</div>
 <h2><%= issue_heading(@issue) %></h2>
-
+<%#= @issue.inspect %>
 <%= labelled_form_for @issue, :url => url_for(:controller => 'kanban_cards', :action => 'update'),:html => {:id => 'kanban_card_form', :multipart => true} do |f| %>
 
     <%= error_messages_for 'issue', 'time_entry' %>
@@ -88,8 +83,9 @@
 
                 console.log(data.errors);
                 if(data.errors) {
-                    $('#issue_errors #divError').css("display", "block");
-                    $('#issue_errors #divError').text(data.errors)
+                    $('#errorExplanation').css("display", "block");
+                    $('#errorExplanation ul').empty();
+                    $('#errorExplanation ul').append(data.errors)
                 }
                 else
                 {
@@ -109,42 +105,47 @@
     });
 
 
-function find_kanban_state_id()
-    {
-     var issue_status_id= $('form.edit_issue select#issue_status_id').val();
-         $.ajax({
-            url: "/kanbans/find_kanban_state_id", // Route to the Script Controller method
-            type: "GET",
-            dataType: "json",
-            // This goes to Controller in params hash, i.e. params[:file_name]
-            data: {issue_status_id: issue_status_id},
 
-            success: function (data) {
+//
+//    function update_form()
+//
+//    {
+//
+//        // Sprint Create
+//
+//        $.ajax({
+//            url: "/kanbans/update_form?" + $('form#kanban_card_form').serialize(), // Route to the Script Controller method
+//            type: "POST",
+//            dataType: "json",
+//            // This goes to Controller in params hash, i.e. params[:file_name]
+//
+//            complete: function () {
+//            },
+//            success: function (data) {
+//
+//                console.log(data.errors);
+//                if(data.errors) {
+//                    $('#issue_errors #divError').css("display", "block");
+//                    $('#issue_errors #divError').text(data.errors)
+//                }
+//                else
+//                {
+//                    console.log($("#popupWindowBody"))
+////                    console.log(data.editcardPartial)
+//                    $("#popupWindowBody").html(data.editcardPartial)
+////                    $("#popupWindow").dialog('close');
+//                    console.log(7777777777777)
+////                    find_issue_status_id();
+//
+//                }
+//
+//            }
+//
+//        });
+//
+//    }
 
-                $('form.edit_issue select#kanban_state_id').val(data.kanban_state_id)
-              }
-        });
 
 
-    }
-
-    function find_issue_status_id()
-    {
-        var kanban_state_id= $('form.edit_issue select#kanban_state_id').val();
-        $.ajax({
-            url: "/kanbans/find_issue_status_id", // Route to the Script Controller method
-            type: "GET",
-            dataType: "json",
-            // This goes to Controller in params hash, i.e. params[:file_name]
-            data: {kanban_state_id: kanban_state_id},
-
-            success: function (data) {
-
-                $('form.edit_issue select#issue_status_id').val(data.issue_status_id)
-            }
-        });
-
-
-    }
 
 </script>

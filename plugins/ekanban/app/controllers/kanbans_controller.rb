@@ -36,8 +36,8 @@ class KanbansController < ApplicationController
 
   skip_before_filter :check_if_login_required
   skip_before_filter :verify_authenticity_token
-  before_filter :find_project, :only => [ :update_form]
-  before_filter :build_new_issue_from_params, :only => [:update_form]
+  before_filter :find_project, :only => [ :update_form,:kanban_issue_show]
+  before_filter :build_new_issue_from_params, :only => [:update_form,:kanban_issue_show]
 
 
   def index
@@ -569,8 +569,19 @@ end
       @principal = Principal.find(params[:principal_id])
     end
 
-    @kanban_status_id = params[:kanban_status_id]
-    @issue_status_id = params[:issue_status_id]
+    # @kanban_status_id = params[:kanban_status_id]
+
+    if params[:issue].present? && params[:issue][:status_id].present?
+      @issue_status_id = params[:issue][:status_id]
+    issues_status_id = params[:issue][:status_id]
+    issue_states = IssueStatusKanbanState.where(:issue_status_id=>issues_status_id)
+    if issue_states.present?
+      p "++++++++++++++++++++++++issue statatatatatattata"
+     p @kanban_status_id = issue_states.map(&:kanban_state_id).first
+     p @issue_status_id = params[:issue][:status_id]
+    end
+   end
+
     @kanban_pane_id = params[:kanban_pane_id]
     #
     with_format :html do

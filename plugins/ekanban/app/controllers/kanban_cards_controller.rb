@@ -55,7 +55,7 @@ class KanbanCardsController < ApplicationController
     saved = false
     begin
       saved = save_issue_with_child_records
-      @issue.status_id = params[:issue_status_id]
+      # @issue.status_id = params[:issue_status_id]
     rescue ActiveRecord::StaleObjectError
       @conflict = true
       if params[:last_journal_id]
@@ -64,16 +64,12 @@ class KanbanCardsController < ApplicationController
       end
     end
     # @issue = Issue.find(params[:issue_id])
-    p params[:issue_id]
     @card = KanbanCard.find_by_issue_id(params[:issue_id])
-    p "+++++++++++++++++===@card+++++++++=@card+++++++++++"
-    p @card
-    p "++++++++++++++end +++++++++++"
     old_card = @card.dup
 
     # @journal = @issue.init_journal(User.current, params[:comment][:notes])
     #
-    @issue.status_id = params[:issue_status_id]
+    # @issue.status_id = params[:issue_status_id]
     if params[:kanban_state_id].nil?
 	   pane = KanbanPane.find(params[:kanban_pane_id])
     else
@@ -89,9 +85,10 @@ class KanbanCardsController < ApplicationController
     # KanbanCardJournal.build(old_card,@card,@journal) if @saved == true
 
     if !saved
-
-      @errors = ""
-      @issue.errors.full_messages.each {|s| @errors += (s + ";")}
+       @errors=""
+      @issue.errors.full_messages.each do |s|
+        @errors += ("<li>"+s+"</li>")
+      end
     end
   	respond_to do |format|
       format.json do
@@ -106,8 +103,14 @@ class KanbanCardsController < ApplicationController
         else
          # render :nothing => true
           if request.xhr?
+
+            @errors=""
+            @issue.errors.full_messages.each do |s|
+              @errors += ("<li>"+s+"</li>")
+            end
             render :json => {
-                :errors=> @issue.errors.full_messages.each {|s| @errors += (s + "</br>")}
+
+                :errors=> @errors
             }
           end
         end
@@ -308,9 +311,12 @@ class KanbanCardsController < ApplicationController
       respond_to do |format|
         format.html { render :action => 'new' }
         format.js {
-          @errors = ""
+          @errors=""
+          @time_entry.errors.full_messages.each do |s|
+            @errors += ("<li>"+s+"</li>")
+          end
           render :json => {
-              :errors=> @time_entry.errors.full_messages.each {|s| @errors += (s + "</br>")}
+              :errors=> @errors
           }
         }
       end
