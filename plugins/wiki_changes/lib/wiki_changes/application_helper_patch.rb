@@ -149,7 +149,7 @@ module WikiChanges
             permissions =[]
             current_user_membership = Member.where(:user_id=>User.current.id,:project_id=>project.id).first
             @page = WikiPage.find_by_id(page_id)
-           if @page.present?
+           if @page.present? && @page.wiki_roles.present?
             roles_for_permissions = @page.wiki_roles.where(:role=>current_user_membership.roles.map(&:id))
             roles_for_permissions.each do |wiki_role|
               permissions << wiki_role.permissions
@@ -167,7 +167,7 @@ module WikiChanges
 
             current_user_membership = Member.where(:user_id=>User.current.id,:project_id=>project.id).first
             @page = WikiPage.find_by_id(page_id)
-            if @page.present?
+            if @page.present? && @page.wiki_roles.present?
               roles_for_permissions = @page.wiki_roles.where(:role=>current_user_membership.roles.map(&:id))
               roles_for_permissions.each do |wiki_role|
                 permissions << wiki_role.permissions
@@ -185,7 +185,7 @@ module WikiChanges
             permissions =[]
             current_user_membership = Member.where(:user_id=>User.current.id,:project_id=>project.id).first
             @page = WikiPage.find_by_id(page_id)
-            if @page.present?
+            if @page.present? && @page.wiki_roles.present?
               roles_for_permissions = @page.wiki_roles.where(:role=>current_user_membership.roles.map(&:id))
               roles_for_permissions.each do |wiki_role|
                 permissions << wiki_role.permissions
@@ -247,41 +247,26 @@ module WikiChanges
              project.members.each do |each_member|
               member_roles << each_member.roles
              end
-            p "++++++++++==permmmmmmissionspermissionspermissionspermissions++++++"
-            p member_roles
-
-               member_roles.flatten.compact.uniq.each do |each_role|
+             member_roles.flatten.compact.uniq.each do |each_role|
                 permissions=[]
                 if each_role.permissions.present?
                 if each_role.permissions.include?("view_wiki_pages".to_sym)
-                  p 11111111111111111111111111111111111111111111111111111
                   permissions << "view_wiki_pages"
 
                  end
                 if each_role.permissions.include?("edit_wiki_pages".to_sym)
-                  p 2222222222222222222222222222222222222222222222
                     permissions << "edit_wiki_pages"
                   end
                 if each_role.permissions.include?("manage_wiki_pages_roles".to_sym)
-                  p 33333333333333333333333333333333333
                     permissions << "manage_wiki_pages_roles"
                 end
                 end
 
                 if permissions.present?
-                  p "+++++++++++++++++print ++++++++++permissionspermissions+++++++++++"
-                  p each_role.id
-                  p permissions
                 wiki_role = WikiRoles.find_or_initialize_by_role_and_wiki_page_id(each_role.id,self.id)
-                p "+++++++++++++====wiki_rolewiki_rolewiki_rolewiki_role+++++++++="
-                  p wiki_role
-
-                  wiki_role.permissions=permissions
-                  p "+++++++++++++====wiki_rolewaaaaaaaaaaaiki_rolewiki_rolewiki_role+++++++++="
-                  wiki_role.save
-                  p "+++++++++++++====save  wiki_rolewaaaaaaaaaaaiki_rolewiki_rolewiki_role+++++++++="
-                  p wiki_role
+                wiki_role.permissions=permissions
                 wiki_role.wiki_page_id=self.id
+                wiki_role.save
                 # wiki_role.save
                   # wiki_role.update_attributes(:permisssion=>permissions)
                 end
@@ -289,7 +274,76 @@ module WikiChanges
             end
 
             end
-            end
+          end
+
+
+          def self.update_wiki_roles_for_exist_pages
+            # project = self.project
+            project_roles = []
+             Project.active.each do |each_project|
+               each_project.members.each do |project_member|
+                 project_roles << project_member.roles.map(&:id) if project_member.roles.present?
+               end
+
+               if project_roles.present?
+                 project_roles = project_roles.flatten.compact
+
+                 project_roles.each do |each_role|
+
+                 if each_project.wiki.present? && each_project.wiki.pages.present?
+                 each_project.wiki.pages.each do |wiki_page|
+                 each_role = Role.find(each_role)
+                 permissions=[]
+                 if each_role.permissions.present?
+                   if each_role.permissions.include?("view_wiki_pages".to_sym)
+                     permissions << "view_wiki_pages"
+
+                   end
+                   if each_role.permissions.include?("edit_wiki_pages".to_sym)
+                     permissions << "edit_wiki_pages"
+                   end
+                   if each_role.permissions.include?("manage_wiki_pages_roles".to_sym)
+                     permissions << "manage_wiki_pages_roles"
+                   end
+                 end
+
+                 if permissions.present?
+                   wiki_role = WikiRoles.find_or_initialize_by_role_and_wiki_page_id(each_role.id,wiki_page.id)
+                   wiki_role.permissions=permissions
+                   wiki_role.wiki_page_id=wiki_page.id
+                   wiki_role.save
+                   # wiki_role.save
+                   # wiki_role.update_attributes(:permisssion=>permissions)
+                 end
+
+                 end
+
+                 end
+
+
+
+
+
+
+               end
+               end
+
+               # each_project.wiki.pages.each do |wiki_page|
+               #
+               #
+               #
+               # end
+
+             end
+
+
+
+
+
+
+
+
+          end
 
 
         end
@@ -497,29 +551,20 @@ module WikiChanges
               end
             end
             if params[:detail].present?
-
-@roles = WikiRoles.where(wiki_page_id: @page.id,role:params[:detail][:update_child_pages])
-
-
-@child_pages=WikiPage.where(:parent_id=>@page.id)
-
-if @child_pages.present?
-  @child_pages.each do |each_child|
-   @roles.each do |each_role|
-     find_parent_permissions = WikiRoles.where(:role=>each_role.role,:wiki_page_id=>@page.id)
-      wiki_role = WikiRoles.find_or_initialize_by_role_and_wiki_page_id(each_role.role,each_child.id)
-      wiki_role.permissions=find_parent_permissions.last.permissions
-      wiki_role.wiki_page_id=each_child.id
-      wiki_role.save
-  end
-end
-end
-              # p remove_wiki_role = WikiRoles.where(wiki_page_id: @page.id,role:params[:detail][:update_child_pages])
-              # remove_wiki_role.each do |wiki_role|
-              #   # wiki_role.delete
-              #
-              # end
-   end
+              @roles = WikiRoles.where(wiki_page_id: @page.id,role:params[:detail][:update_child_pages])
+              @child_pages=WikiPage.where(:parent_id=>@page.id)
+              if @child_pages.present?
+                @child_pages.each do |each_child|
+                 @roles.each do |each_role|
+                   find_parent_permissions = WikiRoles.where(:role=>each_role.role,:wiki_page_id=>@page.id)
+                    wiki_role = WikiRoles.find_or_initialize_by_role_and_wiki_page_id(each_role.role,each_child.id)
+                    wiki_role.permissions=find_parent_permissions.last.permissions
+                    wiki_role.wiki_page_id=each_child.id
+                    wiki_role.save
+                end
+              end
+              end
+            end
 
 
 
