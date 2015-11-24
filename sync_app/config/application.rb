@@ -81,7 +81,7 @@ module SyncApp
           end
         else
           scheduler = Rufus::Scheduler.new
-          scheduler.every '10s' do
+          scheduler.every '1m' do
           count = count + 1
           p "============ #{count} ---------#{Time.now}---"
           Sync.sync_sql
