@@ -64,17 +64,17 @@ class Sync < ActiveRecord::Base
     # rec.save
 # hrms_connection =  ActiveRecord::Base.establish_connection(:hrms_sync_details)
     hrms =  ActiveRecord::Base.establish_connection(hrms_sync_details).connection
-    @user_info = hrms.execute("SELECT a.first_name, a.last_name, b.login_id,c.work_email, c.employee_no,b.is_active FROM hrms.employee a, hrms.user b, hrms.official_info c where b.id=a.user_id and a.id=c.employee_id and a.modified_date <= '#{Time.now}'")
+    @user_info = hrms.execute("SELECT a.first_name, a.last_name, b.login_id,c.work_email, c.employee_no,b.is_active FROM hrms.employee a, hrms.user b, hrms.official_info c where b.id=a.user_id and a.id=c.employee_id and c.work_email IS NOT NULL and a.modified_date <= '#{Time.now}'")
     hrms.disconnect!
     inia =  ActiveRecord::Base.establish_connection(:production).connection
     @user_info.each(:as => :hash) do |user|
 
-      find_user = "select * from users where users.login='#{user['login_id']}'"
+      find_user = "select * from users where users.mail='#{user['work_email']}'"
       find_user_res =  inia.execute(find_user)
 
       if find_user_res.count == 0
-        @employee_ids << user['employee_no']
-        @in_active_users << user['login_id']
+        # @employee_ids << user['employee_no']
+        # @in_active_users << user['login_id']
         user_insert_query = "INSERT into users(login,firstname,lastname,mail,auth_source_id,created_on,status,type,updated_on)
        VALUES ('#{user['login_id']}','#{user['first_name']}','#{user['last_name']}','#{user['work_email']}',1, NOW(),'#{user['is_active'].present? && user['is_active']>=1 ? user['is_active'] : 3 }','User',NOW())"
         save_user = inia.insert_sql(user_insert_query)
@@ -82,7 +82,7 @@ class Sync < ActiveRecord::Base
         user_info_query = "INSERT into user_official_infos (user_id, employee_id) values ('#{save_user.to_i}',#{user['employee_no']})"
         save_employee = inia.insert_sql(user_info_query)
       else
-        @employee_ids << user['employee_no']
+        # @employee_ids << user['employee_no']
         user_update_query = "UPDATE users SET login='#{user['login_id']}',firstname='#{user['first_name']}',lastname='#{user['last_name']}'
           ,mail='#{user['work_email']}',auth_source_id=1,status='#{user['is_active'].present? && user['is_active']>=1 ? user['is_active'] : 3 }',updated_on=NOW() where login='#{user['login_id']}'"
         update_user = inia.execute(user_update_query)
