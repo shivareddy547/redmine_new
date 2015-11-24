@@ -62,31 +62,31 @@ module SyncApp
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     
-    # config.after_initialize do
-    #   count = 0
-    #    Rails.logger.info '=================== Initialized -----------'
-    #     if defined?(PhusionPassenger)
-    #       PhusionPassenger.on_event(:starting_worker_process) do |forked|
-    #       Rails.logger.info '=================== forked -----------'
-    #       if forked
-    #         count = 0
-    #         scheduler = Rufus::Scheduler.new
-    #         scheduler.every '1m' do
-    #           count = count + 1
-    #           p '============ called sync ---------here---'
-    #         Sync.sync_sql
-    #         Rails.logger.info "---------#{Time.now}--------------#{count}-------------"
-    #         end
-    #       end
-    #       end
-    #     else
-    #       scheduler = Rufus::Scheduler.new
-    #       scheduler.every '1s' do
-    #       count = count + 1
-    #       p "============ #{count} ---------#{Time.now}---"
-    #       Sync.sync_sql
-    #       end
-    #     end
-    # end
+    config.after_initialize do
+      count = 0
+       Rails.logger.info '=================== Initialized -----------'
+        if defined?(PhusionPassenger)
+          PhusionPassenger.on_event(:starting_worker_process) do |forked|
+          Rails.logger.info '=================== forked -----------'
+          if forked
+            count = 0
+            scheduler = Rufus::Scheduler.new
+            scheduler.every '1m' do
+              count = count + 1
+              p '============ called sync ---------here---'
+            Sync.sync_sql
+            Rails.logger.info "---------#{Time.now}--------------#{count}-------------"
+            end
+          end
+          end
+        else
+          scheduler = Rufus::Scheduler.new
+          scheduler.every '10s' do
+          count = count + 1
+          p "============ #{count} ---------#{Time.now}---"
+          Sync.sync_sql
+          end
+        end
+    end
   end
 end
