@@ -279,8 +279,9 @@ module WikiChanges
 
           def self.update_wiki_roles_for_exist_pages
             # project = self.project
-            project_roles = []
+
              Project.active.each do |each_project|
+               project_roles = []
                each_project.members.each do |project_member|
                  project_roles << project_member.roles.map(&:id) if project_member.roles.present?
                end
