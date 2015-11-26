@@ -20,6 +20,7 @@ function kanban_init()
             }else{
                 if (!confirm("Are you sure? Click 'OK' will update the moving to server")){
                     ui.sender.sortable("cancel");
+                    console.log(ui);
                 }else{
                     var popup = $("#popupWindow");
                     var id= $(ui.item).attr('id');
@@ -44,6 +45,10 @@ function kanban_init()
                         error: function () {
                             alert("Error in authentication")
                         }
+                    });
+
+                    $(popup).on('dialogclose', function(event) {
+                        ui.sender.sortable("cancel");
                     });
 
 //                   popupCard(ui.sender,$(this),ui.item,popup,"drop");
