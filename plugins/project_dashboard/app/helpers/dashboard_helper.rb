@@ -403,7 +403,7 @@ end
         end
 
         closed_status = IssueStatus.find_by_name("Closed")
-        closed_issues = @project.issues.where("fixed_version_id in (#{find_versions.map(&:id).join(',')}) #{get_sql_for_trackers_and_statuses}").where("closed_on <= ? AND status_id=?",(each_day.to_date),closed_status.id).count
+        closed_issues = @project.issues.where("fixed_version_id in (#{find_versions.map(&:id).join(',')}) #{get_sql_for_trackers_and_statuses}").where("start_date <= ? AND status_id=?",(each_day.to_date),closed_status.id).count
 
         # @idle_issues_total_count
         issues_count = (@idle_issues_total_count.to_f-closed_issues.to_f)
@@ -426,7 +426,7 @@ end
           @idle_issues_count_array << (@idle_issues_count -= idle_issues_devide).round
         end
 
-        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.closed_on <= ?",Time.parse(each_day.to_date.to_s)).count
+        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.start_date <= ?",Time.parse(each_day.to_date.to_s)).count
         # @idle_issues_total_count
         issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
         @issues_count_array << issues_count rescue 0
@@ -518,7 +518,7 @@ end
         else
           @idle_issues_hours_count_array << (@idle_issues_hours_count -= idle_issues_devide).round
         end
-        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.closed_on <= ?",Time.parse(each_day.to_date.to_s)).count
+        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.start_date <= ?",Time.parse(each_day.to_date.to_s)).count
         # @idle_issues_total_count
         issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
         @issues_hours_count_array << issues_count rescue 0
@@ -603,7 +603,7 @@ end
         else
           @idle_issues_hours_count_array << (@idle_issues_hours_count -= idle_issues_devide).round
         end
-        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.closed_on <= ?",Time.parse(each_day.to_date.to_s)).count
+        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.start_date <= ?",Time.parse(each_day.to_date.to_s)).count
         # @idle_issues_total_count
         issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
         @issues_hours_count_array << issues_count rescue 0
@@ -691,7 +691,7 @@ end
           @idle_issues_count_array << (@idle_issues_count -= idle_issues_devide).round
         end
 
-        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.closed_on <= ?",Time.parse(each_day.to_date.to_s)).count
+        closed_issues = @project.issues.where("issues.created_on between '#{start_date}' and '#{end_date}'").where("issues.start_date <= ?",Time.parse(each_day.to_date.to_s)).count
         # @idle_issues_total_count
         issues_count = (@idle_issues_total_count.to_i-closed_issues.to_i)
         @issues_count_array << issues_count rescue 0
