@@ -53,6 +53,7 @@
                                     <%= select_tag "role[]", options_from_collection_for_select(Role.all, "id", "name", each_role.present? ? each_role.role : ""), { :prompt => "-Select Role-"} %>
                                     <%#= check_box_tag "update_child_pages[]", :role_id => each_role.role %>
                                     <%= check_box_tag 'detail[update_child_pages][]', each_role.role, false, :id => each_role.role %>
+                                    <%= l_or_humanize("Apply permission to child?", :prefix => 'permission_') %>
                                     <label><%#= l(:field_permissions) %></label>
                                     <%#= each_role.permisssion[index].inspect  %>
                                     <% mod=:wiki_permissions %>

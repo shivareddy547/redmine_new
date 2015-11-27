@@ -346,7 +346,6 @@ module WikiChanges
 
           end
 
-
         end
       end
     end
@@ -365,7 +364,7 @@ module WikiChanges
             p "+++++++++++++++end ++++++++++++"
             update_wiki_roles_for_project(@project,@page.id)
             if !@page.new_record? && !user_allowed_to_edit?(@project,@page.id).present? && !user_allowed_to_view?(@project,@page.id).present?
-              render_404
+              render_permission_denied
               return
             end
 
@@ -379,7 +378,7 @@ module WikiChanges
                 edit
                 render :action => 'edit'
               else
-                render_404
+                render_permission_denied
               end
               return
             end
@@ -411,7 +410,7 @@ module WikiChanges
           def edit
 
             if !@page.new_record? && !user_allowed_to_edit?(@project,@page.id).present?
-              render_404
+              render_permission_denied
               return
             end
             return render_403 unless editable?
@@ -434,7 +433,7 @@ module WikiChanges
             if params[:section].present? && Redmine::WikiFormatting.supports_section_edit?
               @section = params[:section].to_i
               @text, @section_hash = Redmine::WikiFormatting.formatter.new(@text).get_section(@section)
-              render_404 if @text.blank?
+              render_permission_denied if @text.blank?
             end
           end
 
@@ -574,6 +573,18 @@ module WikiChanges
             #   tag = Tag.create :name => tag
             #   Skill.create :tag_id => tag.id, :weight => weights[index]
             # end
+          end
+
+          def render_permission_denied
+            @message = "Permissions denaied..!"
+            respond_to do |format|
+              format.html {
+                render :template => 'wiki_changes/permission_denied', :layout => 'layouts/base'
+                #render template: 'wiki_changes/permission_denied', layout: 'layouts/application'
+                }
+
+               format.all { render nothing: true, status: 404 }
+            end
           end
 
         end
