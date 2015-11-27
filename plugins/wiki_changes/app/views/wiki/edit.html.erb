@@ -33,6 +33,7 @@
                   <a href="javascript:;" id="addNewTag" style="float:right">Add New Role</a></br>
                   <div class="box tabular" id="permissions">
                     <p>
+                      <% @wiki_roles = @page.new_record? ? @page.parent.wiki_roles : @page.wiki_roles %>
 
                              <%= fp.fields_for :wiki_roles  do |wiki_role| -%>
 
@@ -41,9 +42,9 @@
                            ) %>
                         <div id="skillSet">
 
-                          <% if @page.wiki_roles.present? %>
+                          <% if @wiki_roles.present? %>
                               <%#= @page.wiki_roles.inspect %>
-                              <% @page.wiki_roles.each_with_index do |each_role,index| %>
+                              <% @wiki_roles.each_with_index do |each_role,index| %>
                                   <%#= index.inspect %>
                                   <%#= render partial: "wiki_changes/wiki_roles",locals: {each_role: each_role} %>
 
