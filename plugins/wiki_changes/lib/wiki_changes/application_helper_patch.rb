@@ -576,7 +576,7 @@ module WikiChanges
           end
 
           def render_permission_denied
-            @message = "Permissions denaied..!"
+            @message = "Permissions denied..!"
             respond_to do |format|
               format.html {
                 render :template => 'wiki_changes/permission_denied', :layout => 'layouts/base'
