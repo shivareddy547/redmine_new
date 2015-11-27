@@ -149,7 +149,7 @@ module WikiChanges
             permissions =[]
             current_user_membership = Member.where(:user_id=>User.current.id,:project_id=>project.id).first
             @page = WikiPage.find_by_id(page_id)
-           if @page.present? && @page.wiki_roles.present?
+           if @page.present? && @page.wiki_roles.present? && current_user_membership.present? && current_user_membership.roles.present?
             roles_for_permissions = @page.wiki_roles.where(:role=>current_user_membership.roles.map(&:id))
             roles_for_permissions.each do |wiki_role|
               permissions << wiki_role.permissions
@@ -158,7 +158,7 @@ module WikiChanges
             # p permissions
             # p permissions.flatten.compact.include?("edit_wiki_pages")
             # user_roles = current_user_membership.roles
-             return permissions.present? && (permissions.flatten.compact.include?("edit_wiki_pages") == true) || User.current.admin? ? true : ""
+             return (permissions.present? && (permissions.flatten.compact.include?("edit_wiki_pages") == true)) || User.current.admin? ? true : ""
             end
             end
 
@@ -167,7 +167,7 @@ module WikiChanges
 
             current_user_membership = Member.where(:user_id=>User.current.id,:project_id=>project.id).first
             @page = WikiPage.find_by_id(page_id)
-            if @page.present? && @page.wiki_roles.present?
+            if @page.present? && @page.wiki_roles.present? && current_user_membership.present? && current_user_membership.roles.present?
               roles_for_permissions = @page.wiki_roles.where(:role=>current_user_membership.roles.map(&:id))
               roles_for_permissions.each do |wiki_role|
                 permissions << wiki_role.permissions
@@ -176,7 +176,7 @@ module WikiChanges
               # p permissions
               # p permissions.flatten.compact.include?("edit_wiki_pages")
               # user_roles = current_user_membership.roles
-              return permissions.present? && (permissions.flatten.compact.include?("view_wiki_pages") == true) || User.current.admin? ? true : ""
+              return (permissions.present? && (permissions.flatten.compact.include?("view_wiki_pages") == true)) || User.current.admin? ? true : ""
             end
           end
 
@@ -185,7 +185,7 @@ module WikiChanges
             permissions =[]
             current_user_membership = Member.where(:user_id=>User.current.id,:project_id=>project.id).first
             @page = WikiPage.find_by_id(page_id)
-            if @page.present? && @page.wiki_roles.present?
+            if @page.present? && @page.wiki_roles.present? && current_user_membership.present? && current_user_membership.roles.present?
               roles_for_permissions = @page.wiki_roles.where(:role=>current_user_membership.roles.map(&:id))
               roles_for_permissions.each do |wiki_role|
                 permissions << wiki_role.permissions
@@ -194,7 +194,7 @@ module WikiChanges
               # p permissions
               # p permissions.flatten.compact.include?("edit_wiki_pages")
               # user_roles = current_user_membership.roles
-              return permissions.present? && (permissions.flatten.compact.include?("manage_wiki_pages_roles") == true) || User.current.admin? ? true : ""
+              return (permissions.present? && (permissions.flatten.compact.include?("manage_wiki_pages_roles") == true)) || User.current.admin? ? true : ""
             end
           end
 
@@ -359,11 +359,9 @@ module WikiChanges
         base.class_eval do
           # display a page (in editing mode if it doesn't exist)
           def show
-            p "++++++++++++++++++++pagegegegeggegege+++++++++++"
-            p @page
-            p "+++++++++++++++end ++++++++++++"
+
             update_wiki_roles_for_project(@project,@page.id)
-            if !@page.new_record? && !user_allowed_to_edit?(@project,@page.id).present? && !user_allowed_to_view?(@project,@page.id).present?
+            if !User.current.admin? && !@page.new_record? && !user_allowed_to_edit?(@project,@page.id).present? && !user_allowed_to_view?(@project,@page.id).present?
               render_permission_denied
               return
             end
@@ -409,7 +407,7 @@ module WikiChanges
           # edit an existing page or a new one
           def edit
 
-            if !@page.new_record? && !user_allowed_to_edit?(@project,@page.id).present?
+            if !User.current.admin? && !@page.new_record? && !user_allowed_to_edit?(@project,@page.id).present?
               render_permission_denied
               return
             end
