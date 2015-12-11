@@ -94,7 +94,9 @@ class KanbansController < ApplicationController
       if @project.issues.present?
         @kanban.kanban_pane.each do |each_pane|
           #issues = @project.issues.where(:status_id=>each_pane.kanban_state.issue_status.last.id) if each_pane.kanban_state.issue_status.present?
-          issues = @project.issues.where(:status_id=>each_pane.kanban_state.issue_status.map(&:id),:tracker_id=>@kanban.tracker_id) if each_pane.kanban_state.issue_status.present?
+          KanbanCard.where(:kanban_pane_id=>each_pane.id).delete_all
+          # cards
+          p issues = @project.issues.where(:status_id=>each_pane.kanban_state.issue_status.map(&:id),:tracker_id=>@kanban.tracker_id) if each_pane.kanban_state.issue_status.present?
           if issues.present?
             issues.each do |each_issue|
               kanban_new = KanbanCard.find_or_initialize_by_issue_id_and_kanban_pane_id(each_issue.id,each_pane.id)
@@ -109,6 +111,7 @@ class KanbansController < ApplicationController
       end
       if @kanban.subproject_enable == true
           @kanban.kanban_pane.each do |each_pane|
+            KanbanCard.where(:kanban_pane_id=>each_pane.id).delete_all
           @subprojects = @project.descendants.active
           @subprojects_ids = @subprojects.map(&:id).join(',') if @subprojects.present?
           issues=[]

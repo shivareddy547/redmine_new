@@ -49,3 +49,4 @@ en:
   label_sprints_placeholder_goal: "[Goal]"
   label_sprints_placeholder_velocity: "[Velocity]"
   label_sprints_title_edit: "Edit Sprint"
+  label_sprints_title_new: "New Sprint"
