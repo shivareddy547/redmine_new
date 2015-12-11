@@ -24,6 +24,8 @@ class KanbanCardsController < ApplicationController
   skip_before_filter :check_if_login_required
   skip_before_filter :verify_authenticity_token
   before_filter :build_new_issue_from_params, :only => [:add_new_issue,:create_new_issue]
+  before_filter :find_issue, :only => [:update]
+
   def index
   	respond_to :json
   end
@@ -48,14 +50,11 @@ class KanbanCardsController < ApplicationController
   end
 
   def update
-
-    @issue = Issue.find(params[:issue_id])
     return unless update_issue_from_params
     @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
     saved = false
     begin
       saved = save_issue_with_child_records
-      # @issue.status_id = params[:issue_status_id]
     rescue ActiveRecord::StaleObjectError
       @conflict = true
       if params[:last_journal_id]
@@ -63,34 +62,30 @@ class KanbanCardsController < ApplicationController
         @conflict_journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, @issue.project)
       end
     end
-    # @issue = Issue.find(params[:issue_id])
-    @card = KanbanCard.find_by_issue_id(params[:issue_id])
-    old_card = @card.dup
 
-    # @journal = @issue.init_journal(User.current, params[:comment][:notes])
+    # if saved
+    #   render_attachment_warning_if_needed(@issue)
+    #   flash[:notice] = l(:notice_successful_update) unless @issue.current_journal.new_record?
     #
-    # @issue.status_id = params[:issue_status_id]
-    if params[:kanban_state_id].nil?
-	   pane = KanbanPane.find(params[:kanban_pane_id])
-    else
-    	pane = KanbanPane.find_by_kanban_id_and_kanban_state_id(@card.kanban_pane.kanban.id, params[:kanban_state_id])
-    end
-    @card.kanban_pane_id = pane.id
+    #   respond_to do |format|
+    #     format.html { redirect_back_or_default issue_path(@issue) }
+    #     format.api  { render_api_ok }
+    #   end
+    # else
+    #   respond_to do |format|
+    #     format.html { render :action => 'edit' }
+    #     format.api  { render_validation_errors(@issue) }
+    #   end
+    # end
 
-    saved = false
-    begin
-      saved = save_with_issues();
-    rescue ActiveRecord::StaleObjectError
-    end
-    # KanbanCardJournal.build(old_card,@card,@journal) if @saved == true
 
     if !saved
-       @errors=""
+      @errors=""
       @issue.errors.full_messages.each do |s|
         @errors += ("<li>"+s+"</li>")
       end
     end
-  	respond_to do |format|
+    respond_to do |format|
       format.json do
         if saved
           # project_id = @card.kanban_pane.kanban.project_id
@@ -101,7 +96,7 @@ class KanbanCardsController < ApplicationController
             }
           end
         else
-         # render :nothing => true
+          # render :nothing => true
           if request.xhr?
 
             @errors=""
@@ -119,8 +114,111 @@ class KanbanCardsController < ApplicationController
         render :partial => "update"
       end
     end
+
+
   end
 
+
+
+  # def update
+  #
+  #   return unless update_issue_from_params
+  #   @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+  #   saved = false
+  #   begin
+  #     saved = save_issue_with_child_records
+  #   rescue ActiveRecord::StaleObjectError
+  #     @conflict = true
+  #     if params[:last_journal_id]
+  #       @conflict_journals = @issue.journals_after(params[:last_journal_id]).all
+  #       @conflict_journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, @issue.project)
+  #     end
+  #   end
+  #
+  #
+  #
+  #
+  #   @issue = Issue.find(params[:issue_id])
+  #   return unless update_issue_from_params
+  #   @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+  #   saved = false
+  #   begin
+  #     saved = save_issue_with_child_records
+  #     # @issue.status_id = params[:issue_status_id]
+  #   rescue ActiveRecord::StaleObjectError
+  #     @conflict = true
+  #     if params[:last_journal_id]
+  #       @conflict_journals = @issue.journals_after(params[:last_journal_id]).all
+  #       @conflict_journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, @issue.project)
+  #     end
+  #   end
+  #   # @issue = Issue.find(params[:issue_id])
+  #   @card = KanbanCard.find_by_issue_id(params[:issue_id])
+  #   old_card = @card.dup
+  #
+  #   # @journal = @issue.init_journal(User.current, params[:comment][:notes])
+  #   #
+  #   # @issue.status_id = params[:issue_status_id]
+  #   if params[:kanban_state_id].nil?
+	 #   pane = KanbanPane.find(params[:kanban_pane_id])
+  #   else
+  #   	pane = KanbanPane.find_by_kanban_id_and_kanban_state_id(@card.kanban_pane.kanban.id, params[:kanban_state_id])
+  #   end
+  #   @card.kanban_pane_id = pane.id
+  #
+  #   saved = false
+  #   begin
+  #     saved = save_with_issues();
+  #   rescue ActiveRecord::StaleObjectError
+  #   end
+  #   # KanbanCardJournal.build(old_card,@card,@journal) if @saved == true
+  #
+  #   if !saved
+  #      @errors=""
+  #     @issue.errors.full_messages.each do |s|
+  #       @errors += ("<li>"+s+"</li>")
+  #     end
+  #   end
+  # 	respond_to do |format|
+  #     format.json do
+  #       if saved
+  #         # project_id = @card.kanban_pane.kanban.project_id
+  #         # redirect_to project_kanbans_path(project_id)
+  #         if request.xhr?
+  #           render :json => {
+  #               :issue=> @issue.subject
+  #           }
+  #         end
+  #       else
+  #        # render :nothing => true
+  #         if request.xhr?
+  #
+  #           @errors=""
+  #           @issue.errors.full_messages.each do |s|
+  #             @errors += ("<li>"+s+"</li>")
+  #           end
+  #           render :json => {
+  #
+  #               :errors=> @errors
+  #           }
+  #         end
+  #       end
+  #     end
+  #     format.js do
+  #       render :partial => "update"
+  #     end
+  #   end
+  # end
+
+  def find_issue
+    # Issue.visible.find(...) can not be used to redirect user to the login form
+    # if the issue actually exists but requires authentication
+    @issue = Issue.find(params[:id])
+    raise Unauthorized unless @issue.visible?
+    @project = @issue.project
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
 
   # TODO: Refactor, not everything in here is needed by #edit
   def update_issue_from_params
