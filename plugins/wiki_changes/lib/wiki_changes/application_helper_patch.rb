@@ -8,8 +8,6 @@ module WikiChanges
 
         base.class_eval do
           unloadable
-
-
           def textilizable1(*args)
             options = args.last.is_a?(Hash) ? args.pop : {}
              case args.size
@@ -35,8 +33,6 @@ module WikiChanges
             return '' if text.blank?
             project = options[:project] || @project || (obj && obj.respond_to?(:project) ? obj.project : nil)
             @only_path = only_path = options.delete(:only_path) == false ? false : true
-            p "+++++++++++==text+texttexttexttext++++++++++++"
-            p text
             text = text.dup
             macros = catch_macros(text)
             text = Redmine::WikiFormatting.to_html(Setting.text_formatting, text, :object => obj, :attribute => attr)
@@ -194,7 +190,9 @@ module WikiChanges
               # p permissions
               # p permissions.flatten.compact.include?("edit_wiki_pages")
               # user_roles = current_user_membership.roles
-              return (permissions.present? && (permissions.flatten.compact.include?("manage_wiki_pages_roles") == true)) || User.current.admin? ? true : ""
+              p 5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
+              p permissions.flatten.compact.include?("manage_wiki_pages_roles")
+              return ((permissions.present? && (permissions.flatten.compact.include?("manage_wiki_pages_roles") == true)) || (User.current.admin?)) ? true : ""
             end
           end
 
@@ -320,12 +318,6 @@ module WikiChanges
                  end
 
                  end
-
-
-
-
-
-
                end
                end
 
@@ -336,14 +328,6 @@ module WikiChanges
                # end
 
              end
-
-
-
-
-
-
-
-
           end
 
         end
